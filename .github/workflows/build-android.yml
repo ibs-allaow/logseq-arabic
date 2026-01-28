@@ -34,11 +34,11 @@ on:
         type: boolean
     secrets:
       ANDROID_KEYSTORE:
-        required: true
+        required: false
       ANDROID_KEYSTORE_PASSWORD:
-        required: true
+        required: false
       SENTRY_AUTH_TOKEN:
-        required: true
+        required: false
 
 env:
   CLOJURE_VERSION: '1.11.1.1413'
@@ -109,22 +109,22 @@ jobs:
 
       - name: Compile CLJS - app variant, use es6 instead of es-next
         run: yarn install && yarn release-mobile
-        env:
-          LOGSEQ_SENTRY_DSN: ${{ secrets.LOGSEQ_SENTRY_DSN }}
-          LOGSEQ_POSTHOG_TOKEN: ${{ secrets.LOGSEQ_POSTHOG_TOKEN }}
+#        env:
+#          LOGSEQ_SENTRY_DSN: ${{ secrets.LOGSEQ_SENTRY_DSN }}
+#          LOGSEQ_POSTHOG_TOKEN: ${{ secrets.LOGSEQ_POSTHOG_TOKEN }}
 
-      - name: Upload Sentry Sourcemaps (beta only)
+#      - name: Upload Sentry Sourcemaps (beta only)
         # if: ${{ github.repository == 'logseq/logseq' && (inputs.build-target == 'beta' || github.event.inputs.build-target == 'beta') }}
-        run: |
-          curl -sL https://sentry.io/get-cli/ | bash
-          release_name="logseq-android@${{ steps.ref.outputs.version }}"
-          sentry-cli releases new "${release_name}"
-          sentry-cli releases files "${release_name}" upload-sourcemaps --ext map --ext js ./static/js --url-prefix '~/static/js'
-          sentry-cli releases finalize "${release_name}"
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: logseq
-          SENTRY_PROJECT: logseq
+#        run: |
+#          curl -sL https://sentry.io/get-cli/ | bash
+#          release_name="logseq-android@${{ steps.ref.outputs.version }}"
+#          sentry-cli releases new "${release_name}"
+#          sentry-cli releases files "${release_name}" upload-sourcemaps --ext map --ext js ./static/js --url-prefix '~/static/js'
+#          sentry-cli releases finalize "${release_name}"
+#       env:
+#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+#          SENTRY_ORG: logseq
+#          SENTRY_PROJECT: logseq
 
       - name: Sync public to Android Project
         run: npx cap sync android
@@ -137,8 +137,8 @@ jobs:
           ./gradlew clean
           ./gradlew zipApksForRelease
         working-directory: android
-        env:
-          LOGSEQ_SENTRY_DSN: ${{ secrets.LOGSEQ_SENTRY_DSN }}
+#        env:
+#          LOGSEQ_SENTRY_DSN: ${{ secrets.LOGSEQ_SENTRY_DSN }}
 
       - name: Sign Android APK
         run: |
