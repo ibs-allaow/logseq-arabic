@@ -147,7 +147,7 @@ jobs:
 #            --ks keystore.jks --ks-pass "pass:${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
 #            --in app/build/outputs/apk/release/app-release-unsigned.apk \
 #            --out app-signed.apk
-        working-directory: android
+#        working-directory: android
 
       - name: Rename Apk
         run: |
