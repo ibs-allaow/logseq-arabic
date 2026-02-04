@@ -1,228 +1,202 @@
-name: Build - Linux x64 + Android (no Sentry, unsigned APK)
+name: Build-Desktop-Release
 
 on:
   workflow_dispatch:
     inputs:
+      build-target:
+        description: 'Build Target (Release Type)'
+        type: choice
+        required: true
+        options:
+          - beta
+          - nightly
+          - non-release
+        default: "non-release"
       git-ref:
-        description: "Branch or commit to build"
+        description: "Release Git Ref (Which branch or tag to build?)"
         required: true
         default: "master"
+      is-draft:
+        description: 'Draft Release? (Beta only, Nightly will always be a non-draft)'
+        type: boolean
+        required: true
+        default: true
+      is-pre-release:
+        description: 'Pre Release? (labeled as "PreRelease")'
+        type: boolean
+        required: true
+        default: true
+      enable-file-sync-production:
+        description: 'File sync production mode'
+        type: boolean
+        required: true
+        default: true
+      enable-plugins:
+        description: 'Build with plugin system support'
+        type: boolean
+        required: true
+        default: true
+      build-android:
+        description: 'Build Android App'
+        type: boolean
+        required: true
+        default: true
 
 env:
   CLOJURE_VERSION: '1.11.1.1413'
-  NODE_VERSION: '22'
+  NODE_VERSION: '20.11.1'
   JAVA_VERSION: '17'
+  # تم حذف متغيرات Sentry من هنا
 
 jobs:
-  # 1) compile CLJS and prepare static artifact
-  compile-cljs:
-    runs-on: ubuntu-22.04
-    outputs:
-      version: ${{ steps.get-version.outputs.version }}
+  build-electron:
+    name: Build Electron App (Linux x64 Only)
+    # تم حذف المصفوفة (matrix) وحصر العمل في أوبنتو فقط
+    runs-on: ubuntu-20.04
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.git-ref }}
+          ref: ${{ inputs.git-ref }}
+          fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
 
-      - name: Get yarn cache dir
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache yarn
-        uses: actions/cache@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
-          java-version: 17
 
-      - name: Cache Clojure deps
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.m2/repository
-            ~/.gitlibs
-          key: ${{ runner.os }}-clojure-${{ hashFiles('**/deps.edn') }}
-
-      - name: Setup Clojure
-        uses: DeLaGuardo/setup-clojure@10.1
+      - name: Set up Clojure
+        uses: DeLaGuardo/setup-clojure@12.1
         with:
           cli: ${{ env.CLOJURE_VERSION }}
 
-      - name: Install JS deps & build UI + CLJS (release builds used for desktop + android)
-        run: |
-          yarn install
-          yarn ui:build || true
-          # build UI then full frontend release (adjust commands if your repo uses different scripts)
-          gulp build || true
-          # release app / electron assets and webpack build
-          yarn cljs:release || true
-          yarn webpack-app-build || true
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build Logseq App
         env:
-          # keep these empty in forks; removed Sentry step anyway
-          LOGSEQ_SENTRY_DSN: ""
-
-      - name: Get package version
-        id: get-version
+          # تم حذف متغيرات Sentry
+          start_of_week: :monday
+          LOGSEQ_CI: true
+          ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
+          ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
         run: |
-          if [ -f static/VERSION ]; then
-            ver=$(cat static/VERSION)
-          else
-            # fallback: try node script
-            ver=$(node ./scripts/get-pkg-version.js "non-release" || echo "dev")
-          fi
-          echo "version=$ver" >> $GITHUB_OUTPUT
+          # هذا الأمر سيبني نسخة لينكس الافتراضية (عادة x64 على هذا النظام)
+          yarn release-electron
 
-      - name: Upload static artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: static
-          path: static
+          name: logseq-linux-builds
+          path: |
+            static/out/*
+            !static/out/*-unpacked
 
-  # 2) Build Linux x64 (AppImage + zip) using static artifact
-  build-linux-x64:
-    runs-on: ubuntu-22.04
-    needs: compile-cljs
-    steps:
-      - name: Download static
-        uses: actions/download-artifact@v4
-        with:
-          name: static
-          path: static
-
-      - name: Checkout (to have repo files like package.json etc)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.git-ref }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Get yarn cache dir
-        id: yarn-cache-dir-path-2
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache yarn
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache-dir-path-2.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Build desktop (Linux x64)
-        working-directory: static
-        run: |
-          # install deps for electron builder
-          yarn install --ignore-scripts=false
-          # optional: rebuild native deps if needed
-          yarn rebuild:all || true
-          # create linux x64 AppImage / zip via electron-maker script (project must support this)
-          # using `yarn electron:make` (adjust if your repo uses a different script)
-          yarn electron:make -- --platform=linux --arch=x64 || yarn electron:make || true
-
-      - name: Collect Linux artifacts
-        run: |
-          mkdir -p builds
-          # try AppImage first
-          appimage=$(find static/out/make -type f -name "*.AppImage" -print -quit || true)
-          if [ -n "$appimage" ]; then
-            mv "$appimage" builds/Logseq-linux-x64-${{ needs.compile-cljs.outputs.version }}.AppImage
-          fi
-          # also collect zip if exists
-          zipf=$(find static/out/make -type f -name "*-linux-x64-*.zip" -print -quit || true)
-          if [ -n "$zipf" ]; then
-            mv "$zipf" builds/Logseq-linux-x64-${{ needs.compile-cljs.outputs.version }}.zip
-          fi
-          ls -al builds || true
-
-      - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: logseq-linux-x64-builds
-          path: builds
-
-  # 3) Build Android (unsigned APK) using the same static artifact
   build-android:
-    runs-on: ubuntu-22.04
-    needs: compile-cljs
+    if: ${{ inputs.build-android == 'true' }}
+    name: Build Android App (Unsigned/Debug)
+    runs-on: ubuntu-latest
     steps:
-      - name: Download static
-        uses: actions/download-artifact@v4
-        with:
-          name: static
-          path: static
-
-      - name: Checkout (repo files)
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.git-ref }}
+          ref: ${{ inputs.git-ref }}
+          submodules: true
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup Java 17
-        uses: actions/setup-java@v4
-        with:
+          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
-          java-version: 17
+          cache: 'gradle'
 
-      - name: Ensure Gradle uses Java 17 (fix invalid source release: 21)
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build Android APK
+        env:
+          LOGSEQ_CI: true
+          ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
+          ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
+        # تم تغيير الأمر إلى assembleDebug لتجنب مشاكل التوقيع
         run: |
-          # Gradle property forcing runner Java
-          echo "org.gradle.java.home=$JAVA_HOME" >> android/gradle.properties
-          echo "org.gradle.jvmargs=-Xmx4g" >> android/gradle.properties
+          cd ./src/main/frontend/
+          yarn install
+          npx shadow-cljs release app
+          cd ../../../
+          ./gradlew clean :app:assembleDebug --stacktrace
 
-      - name: Prepare public for Android
-        run: |
-          cp -r static public/
-          rm -rf public/static/js/publishing || true
-          rm -f public/static/js/*.js.map || true
-          rm -rf public/static/ios || true
-          rm -rf public/static/* || true
-          rm -rf android/app/src/main/assets/public || true
-
-      - name: Sync public to Android Project
-        run: npx cap sync android
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.2
-
-      - name: Build Android (zipApksForRelease)
-        working-directory: android
-        run: |
-          ./gradlew clean
-          ./gradlew zipApksForRelease
-
-      - name: Collect unsigned APK
-        run: |
-          mkdir -p builds
-          unsigned=$(find android/app/build/outputs -type f -name "*unsigned*.apk" -print -quit)
-          if [ -z "$unsigned" ]; then
-            echo "No unsigned APK found; listing outputs for debug:"
-            ls -R android/app/build/outputs || true
-            exit 1
-          fi
-          mv "$unsigned" ./builds/Logseq-android-${{ needs.compile-cljs.outputs.version }}-unsigned.apk
-
-      - name: Upload Android artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Android Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: logseq-android-builds
-          path: builds
+          # المسار الجديد لملفات الـ Debug
+          path: ./android/app/build/outputs/apk/debug/*.apk
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-electron, build-android]
+    if: ${{ !cancelled() }} 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: logseq-linux-builds
+          path: ./
+
+      - name: Download Android Artifacts
+        if: ${{ inputs.build-android == 'true' }}
+        uses: actions/download-artifact@v3
+        with:
+          name: logseq-android-builds
+          path: ./
+
+      - name: Retrieve tag version
+        id: ref
+        run: |
+          # محاولة قراءة الإصدار، إذا لم يوجد الملف نضع قيمة افتراضية
+          if [ -f VERSION ]; then
+            pkgver=$(cat VERSION)
+          else
+            pkgver="custom-build"
+          fi
+          echo "version=$pkgver" >> $GITHUB_OUTPUT
+
+      # تم حذف خطوة إصلاح أسماء ملفات ويندوز (Fix .nupkg) لأننا لم نعد نبنيها
+
+      - name: Generate SHA256 checksums
+        run: |
+          # نقوم بحساب المجموع الاختباري لملفات لينكس وأندرويد فقط
+          # استخدام || true لمنع الفشل في حال عدم وجود ملفات
+          sha256sum *-linux-* > SHA256SUMS.txt || true
+          sha256sum *.apk >> SHA256SUMS.txt || true
+          cat SHA256SUMS.txt
+
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.ref.outputs.version }}
+          name: Logseq Custom Build ${{ steps.ref.outputs.version }}
+          body: "Custom build: Linux x64 and Android (Unsigned/Debug)."
+          draft: ${{ inputs.is-draft }}
+          prerelease: ${{ inputs.is-pre-release }}
+          files: |
+            *.AppImage
+            *.deb
+            *.rpm
+            *.apk
+            SHA256SUMS.txt
