@@ -65,13 +65,18 @@ jobs:
           # بناء حزمة الإلكترون (ستنتج AppImage)
           yarn gulp electronMaker
 
+      - name: Check where the AppImage is (Debug)
+        run: find . -name "*.AppImage"
+
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: logseq-linux-appimage
           path: |
-             static/out/*.AppImage
-             dist/*.AppImage
+            **/out/*.AppImage
+            **/dist/*.AppImage
+            ./*.AppImage
+          if-no-files-found: error # سيجعل العملية تفشل بوضوح إذا لم يجد الملف
 
   build-android:
     name: Build Android App
