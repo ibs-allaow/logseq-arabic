@@ -48,35 +48,38 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build Logseq App (Clojure & Webpack)
+      - name: Build Electron App
         env:
           LOGSEQ_CI: true
         run: |
-          # بناء ملفات الـ JS المطلوبة أولاً
           npx shadow-cljs release db-worker inference-worker
           npx shadow-cljs release app
-          
-          # بناء الـ CSS والواجهة
           yarn gulp:build
-          
-          # تجميع الـ Webpack النهائي
           npx webpack build --mode production --config-name app
-          
-          # بناء حزمة الإلكترون (ستنتج AppImage)
+          # تشغيل البناء وتخزين المخرجات في سجل للتأكد
           yarn gulp electronMaker
 
-      - name: Check where the AppImage is (Debug)
-        run: find . -name "*.AppImage"
+      - name: Locate and Move AppImage
+        run: |
+          echo "Searching for AppImage files..."
+          # البحث عن أي ملف AppImage ونسخه للمجلد الحالي باسم واضح
+          find . -name "*.AppImage" -exec cp {} ./logseq-build.AppImage \;
+          
+          # فحص المجلدات الناتجة إذا لم نجد AppImage (للتشخيص)
+          if [ ! -f ./logseq-build.AppImage ]; then
+            echo "AppImage NOT FOUND! Listing all files in static/out:"
+            ls -R static/out || echo "static/out does not exist"
+            ls -R dist || echo "dist does not exist"
+            exit 1 # إفشال العملية هنا لنعرف السبب قبل الرفع
+          fi
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: logseq-linux-appimage
-          path: |
-            **/out/*.AppImage
-            **/dist/*.AppImage
-            ./*.AppImage
-          if-no-files-found: error # سيجعل العملية تفشل بوضوح إذا لم يجد الملف
+          path: logseq-build.AppImage
+
+       if-no-files-found: error # سيجعل العملية تفشل بوضوح إذا لم يجد الملف
 
   build-android:
     name: Build Android App
