@@ -52,7 +52,7 @@ jobs:
   build-electron:
     name: Build Electron App (Linux x64 Only)
     # تم حذف المصفوفة (matrix) وحصر العمل في أوبنتو فقط
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout
