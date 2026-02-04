@@ -86,19 +86,19 @@ jobs:
           ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
           ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
         run: |
-          # 1. بناء ملفات الـ Workers (التي يشتكي Webpack من فقدانها)
-          npx shadow-cljs release db-worker inference-worker --id-as-version
-
+          # 1. بناء ملفات الـ Workers باستخدام الأمر القياسي (release)
+          npx shadow-cljs release db-worker inference-worker
+          
           # 2. بناء التطبيق الرئيسي
-          npx shadow-cljs release app --id-as-version
-
-          # 3. التأكد من وجود الملفات في مجلد target (اختياري للتدقيق)
-          ls -lh static/target/
-
-          # 4. تشغيل بناء الإلكترون النهائي
-          # قمنا بتقسيم الأمر لتجنب التداخل
+          npx shadow-cljs release app
+          
+          # 3. بناء الواجهة (CSS Assets)
           yarn gulp:build
+          
+          # 4. تجميع الـ Webpack
           npx webpack build --mode production --config-name app
+          
+          # 5. بناء حزمة الإلكترون النهائية
           yarn gulp electronMaker
 
       - name: Upload Artifacts
