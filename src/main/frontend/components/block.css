@@ -157,13 +157,13 @@
 
 .block-children-container {
   position: relative;
-  margin-left: 29px;
+  margin-inline-start: 29px;
 }
 
 .block-children-left-border {
   z-index: 1;
   width: 4px;
-  left: -1px;
+  inset-inline-start: -1px;
   top: 0;
   height: 100%;
   cursor: pointer;
@@ -172,7 +172,7 @@
   position: absolute;
   border-radius: 2px;
   opacity: 0.6;
-  border-left-color: var(--lx-gray-09, var(--ls-border-color, var(--rx-gray-09)));
+  border-inline-start-color: var(--lx-gray-09, var(--ls-border-color, var(--rx-gray-09)));
 
   &:hover {
     background-color: var(--lx-gray-10, var(--ls-primary-text-color, var(--rx-gray-10)));
@@ -185,7 +185,7 @@
 }
 
 .block-children {
-  border-left: 1px solid;
+  border-inline-start: 1px solid;
   border-left-color: var(--lx-gray-04-alpha, var(--ls-guideline-color, var(--rx-gray-04-alpha))) !important;
 }
 
