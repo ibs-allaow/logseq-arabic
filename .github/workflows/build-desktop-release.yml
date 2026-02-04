@@ -46,13 +46,11 @@ env:
   CLOJURE_VERSION: '1.11.1.1413'
   NODE_VERSION: '20.11.1'
   JAVA_VERSION: '17'
-  # تم حذف متغيرات Sentry من هنا
 
 jobs:
   build-electron:
     name: Build Electron App (Linux x64 Only)
-    # تم حذف المصفوفة (matrix) وحصر العمل في أوبنتو فقط
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     
     steps:
       - name: Checkout
@@ -62,13 +60,13 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4  # تم التحديث لـ v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4  # تم التحديث لـ v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
@@ -83,22 +81,21 @@ jobs:
 
       - name: Build Logseq App
         env:
-          # تم حذف متغيرات Sentry
           start_of_week: :monday
           LOGSEQ_CI: true
           ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
           ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
         run: |
-          # هذا الأمر سيبني نسخة لينكس الافتراضية (عادة x64 على هذا النظام)
           yarn release-electron
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
         with:
           name: logseq-linux-builds
           path: |
             static/out/*
             !static/out/*-unpacked
+          compression-level: 0 # اختياري: لتسريع الرفع بما أن الملفات مضغوطة أصلاً
 
   build-android:
     if: ${{ inputs.build-android == 'true' }}
@@ -112,7 +109,7 @@ jobs:
           submodules: true
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4  # تم التحديث لـ v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
@@ -126,7 +123,6 @@ jobs:
           LOGSEQ_CI: true
           ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
           ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
-        # تم تغيير الأمر إلى assembleDebug لتجنب مشاكل التوقيع
         run: |
           cd ./src/main/frontend/
           yarn install
@@ -135,11 +131,11 @@ jobs:
           ./gradlew clean :app:assembleDebug --stacktrace
 
       - name: Upload Android Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
         with:
           name: logseq-android-builds
-          # المسار الجديد لملفات الـ Debug
           path: ./android/app/build/outputs/apk/debug/*.apk
+          compression-level: 0
 
   release:
     name: Create Release
@@ -151,14 +147,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Linux Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
         with:
           name: logseq-linux-builds
           path: ./
 
       - name: Download Android Artifacts
         if: ${{ inputs.build-android == 'true' }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
         with:
           name: logseq-android-builds
           path: ./
@@ -166,7 +162,6 @@ jobs:
       - name: Retrieve tag version
         id: ref
         run: |
-          # محاولة قراءة الإصدار، إذا لم يوجد الملف نضع قيمة افتراضية
           if [ -f VERSION ]; then
             pkgver=$(cat VERSION)
           else
@@ -174,12 +169,10 @@ jobs:
           fi
           echo "version=$pkgver" >> $GITHUB_OUTPUT
 
-      # تم حذف خطوة إصلاح أسماء ملفات ويندوز (Fix .nupkg) لأننا لم نعد نبنيها
-
       - name: Generate SHA256 checksums
         run: |
-          # نقوم بحساب المجموع الاختباري لملفات لينكس وأندرويد فقط
-          # استخدام || true لمنع الفشل في حال عدم وجود ملفات
+          # v4 قد يضع الملفات داخل مجلدات، نقوم بنقلها للجذر إذا لزم الأمر أو فحصها مباشرة
+          # الأمر التالي يبحث عن الملفات في المجلد الحالي
           sha256sum *-linux-* > SHA256SUMS.txt || true
           sha256sum *.apk >> SHA256SUMS.txt || true
           cat SHA256SUMS.txt
@@ -191,7 +184,7 @@ jobs:
         with:
           tag_name: ${{ steps.ref.outputs.version }}
           name: Logseq Custom Build ${{ steps.ref.outputs.version }}
-          body: "Custom build: Linux x64 and Android (Unsigned/Debug)."
+          body: "Custom build: Linux x64 and Android (Unsigned/Debug). Fixed Actions v4."
           draft: ${{ inputs.is-draft }}
           prerelease: ${{ inputs.is-pre-release }}
           files: |
