@@ -1,41 +1,12 @@
-name: Build-Desktop-Release
+name: Build-Logseq-Arabic-RTL
 
 on:
   workflow_dispatch:
     inputs:
-      build-target:
-        description: 'Build Target (Release Type)'
-        type: choice
-        required: true
-        options:
-          - beta
-          - nightly
-          - non-release
-        default: "non-release"
       git-ref:
-        description: "Release Git Ref (Which branch or tag to build?)"
+        description: "Branch or Tag to build"
         required: true
-        default: "master"
-      is-draft:
-        description: 'Draft Release? (Beta only, Nightly will always be a non-draft)'
-        type: boolean
-        required: true
-        default: true
-      is-pre-release:
-        description: 'Pre Release? (labeled as "PreRelease")'
-        type: boolean
-        required: true
-        default: true
-      enable-file-sync-production:
-        description: 'File sync production mode'
-        type: boolean
-        required: true
-        default: true
-      enable-plugins:
-        description: 'Build with plugin system support'
-        type: boolean
-        required: true
-        default: true
+        default: "full-rtl-test-only"
       build-android:
         description: 'Build Android App'
         type: boolean
@@ -49,160 +20,118 @@ env:
 
 jobs:
   build-electron:
-    name: Build Electron App (Linux x64 Only)
+    name: Build Linux AppImage
     runs-on: ubuntu-22.04
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.git-ref }}
-          fetch-depth: 0
+          ref: ${{ github.event.inputs.git-ref }}
+          submodules: true
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4  # تم التحديث لـ v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4  # تم التحديث لـ v4
+      - name: Install Java
+        uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
+          java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Set up Clojure
-        uses: DeLaGuardo/setup-clojure@12.1
+      - name: Install Clojure
+        uses: DeLaGuardo/setup-clojure@master
         with:
           cli: ${{ env.CLOJURE_VERSION }}
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build Logseq App
+      - name: Build Logseq App (Clojure & Webpack)
         env:
-          start_of_week: :monday
           LOGSEQ_CI: true
-          ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
-          ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
         run: |
-          # 1. بناء ملفات الـ Workers باستخدام الأمر القياسي (release)
+          # بناء ملفات الـ JS المطلوبة أولاً
           npx shadow-cljs release db-worker inference-worker
-          
-          # 2. بناء التطبيق الرئيسي
           npx shadow-cljs release app
           
-          # 3. بناء الواجهة (CSS Assets)
+          # بناء الـ CSS والواجهة
           yarn gulp:build
           
-          # 4. تجميع الـ Webpack
+          # تجميع الـ Webpack النهائي
           npx webpack build --mode production --config-name app
           
-          # 5. بناء حزمة الإلكترون النهائية
+          # بناء حزمة الإلكترون (ستنتج AppImage)
           yarn gulp electronMaker
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: logseq-linux-builds
+          name: logseq-linux-appimage
           path: |
-            static/out/*
-            !static/out/*-unpacked
-          compression-level: 0 # اختياري: لتسريع الرفع بما أن الملفات مضغوطة أصلاً
+             static/out/*.AppImage
+             dist/*.AppImage
 
   build-android:
-    if: ${{ inputs.build-android == 'true' }}
-    name: Build Android App (Unsigned/Debug)
+    name: Build Android App
+    if: ${{ github.event.inputs.build-android == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.git-ref }}
+          ref: ${{ github.event.inputs.git-ref }}
           submodules: true
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4  # تم التحديث لـ v4
+      - name: Setup Android Environment
+        uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'zulu'
-          cache: 'gradle'
+          java-version: '17'
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build Android APK
-        env:
-          LOGSEQ_CI: true
-          ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
-          ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
+      - name: Build Android Debug APK
         run: |
-          cd ./src/main/frontend/
           yarn install
-          npx shadow-cljs release app
-          cd ../../../
-          ./gradlew clean :app:assembleDebug --stacktrace
+          npx shadow-cljs release mobile
+          cd static && ./gradlew assembleDebug
 
-      - name: Upload Android Artifacts
-        uses: actions/upload-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: logseq-android-builds
-          path: ./android/app/build/outputs/apk/debug/*.apk
-          compression-level: 0
+          name: logseq-android-apk
+          path: static/app/build/outputs/apk/debug/*.apk
 
-  release:
-    name: Create Release
-    runs-on: ubuntu-latest
+  create-release:
+    name: Create GitHub Release
     needs: [build-electron, build-android]
-    if: ${{ !cancelled() }} 
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download Linux Artifacts
-        uses: actions/download-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: logseq-linux-builds
-          path: ./
+          path: ./all-artifacts
 
-      - name: Download Android Artifacts
-        if: ${{ inputs.build-android == 'true' }}
-        uses: actions/download-artifact@v4  # تم التحديث لـ v4 (حل المشكلة)
-        with:
-          name: logseq-android-builds
-          path: ./
-
-      - name: Retrieve tag version
-        id: ref
+      - name: Organize Files
         run: |
-          if [ -f VERSION ]; then
-            pkgver=$(cat VERSION)
-          else
-            pkgver="custom-build"
-          fi
-          echo "version=$pkgver" >> $GITHUB_OUTPUT
-
-      - name: Generate SHA256 checksums
-        run: |
-          # v4 قد يضع الملفات داخل مجلدات، نقوم بنقلها للجذر إذا لزم الأمر أو فحصها مباشرة
-          # الأمر التالي يبحث عن الملفات في المجلد الحالي
-          sha256sum *-linux-* > SHA256SUMS.txt || true
-          sha256sum *.apk >> SHA256SUMS.txt || true
-          cat SHA256SUMS.txt
+          # تجميع ملفات الـ AppImage والـ APK في المجلد الرئيسي للرفع
+          find ./all-artifacts -name "*.AppImage" -exec cp {} . \;
+          find ./all-artifacts -name "*.apk" -exec cp {} . \;
+          
+          # إنشاء ملف الفحص الأمني (بشرط وجود ملفات)
+          sha256sum *.AppImage *.apk > SHA256SUMS.txt || echo "No files to hash" > SHA256SUMS.txt
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.ref.outputs.version }}
-          name: Logseq Custom Build ${{ steps.ref.outputs.version }}
-          body: "Custom build: Linux x64 and Android (Unsigned/Debug). Fixed Actions v4."
-          draft: ${{ inputs.is-draft }}
-          prerelease: ${{ inputs.is-pre-release }}
+          tag_name: "build-${{ github.run_number }}"
+          name: "Logseq Arabic RTL v${{ github.run_number }}"
+          body: "تم بناء هذه النسخة آلياً للتجربة. تشمل AppImage للينكس و APK للأندرويد."
+          draft: true
+          prerelease: true
           files: |
             *.AppImage
-            *.deb
-            *.rpm
             *.apk
             SHA256SUMS.txt
