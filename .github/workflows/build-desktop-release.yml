@@ -52,34 +52,34 @@ jobs:
         env:
           LOGSEQ_CI: true
         run: |
+          # بناء ملفات الـ JS المطلوبة
           npx shadow-cljs release db-worker inference-worker
           npx shadow-cljs release app
+          # بناء الـ CSS
           yarn gulp:build
+          # تجميع Webpack
           npx webpack build --mode production --config-name app
-          # تشغيل البناء وتخزين المخرجات في سجل للتأكد
+          # بناء حزمة الإلكترون
           yarn gulp electronMaker
 
-      - name: Locate and Move AppImage
+      - name: Locate and Prepare AppImage
         run: |
-          echo "Searching for AppImage files..."
-          # البحث عن أي ملف AppImage ونسخه للمجلد الحالي باسم واضح
-          find . -name "*.AppImage" -exec cp {} ./logseq-build.AppImage \;
-          
-          # فحص المجلدات الناتجة إذا لم نجد AppImage (للتشخيص)
-          if [ ! -f ./logseq-build.AppImage ]; then
-            echo "AppImage NOT FOUND! Listing all files in static/out:"
-            ls -R static/out || echo "static/out does not exist"
-            ls -R dist || echo "dist does not exist"
-            exit 1 # إفشال العملية هنا لنعرف السبب قبل الرفع
+          echo "جاري البحث عن ملف AppImage..."
+          # البحث في كل المجلدات ونقله للمجلد الحالي لسهولة الرفع
+          find . -name "*.AppImage" -exec cp {} ./logseq-linux.AppImage \;
+          if [ -f ./logseq-linux.AppImage ]; then
+            echo "تم العثور على الملف بنجاح."
+          else
+            echo "خطأ: لم يتم العثور على ملف AppImage. قائمة الملفات في المجلدات الناتجة:"
+            ls -R static/out || true
+            exit 1
           fi
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: logseq-linux-appimage
-          path: logseq-build.AppImage
-
-       if-no-files-found: error # سيجعل العملية تفشل بوضوح إذا لم يجد الملف
+          path: logseq-linux.AppImage
 
   build-android:
     name: Build Android App
@@ -92,6 +92,12 @@ jobs:
           ref: ${{ github.event.inputs.git-ref }}
           submodules: true
 
+      # إصلاح خطأ إصدار Node في الأندرويد
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
       - name: Setup Android Environment
         uses: actions/setup-java@v4
         with:
@@ -100,45 +106,57 @@ jobs:
 
       - name: Build Android Debug APK
         run: |
-          yarn install
+          yarn install --frozen-lockfile
           npx shadow-cljs release mobile
           cd static && ./gradlew assembleDebug
+
+      - name: Locate and Prepare APK
+        run: |
+          echo "جاري البحث عن ملف APK..."
+          find static/app/build/outputs/apk -name "*.apk" -exec cp {} ./logseq-android.apk \;
+          if [ -f ./logseq-android.apk ]; then
+            echo "تم العثور على APK بنجاح."
+          else
+            echo "خطأ: لم يتم العثور على APK."
+            exit 1
+          fi
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: logseq-android-apk
-          path: static/app/build/outputs/apk/debug/*.apk
+          path: logseq-android.apk
 
   create-release:
     name: Create GitHub Release
     needs: [build-electron, build-android]
+    # يضمن التشغيل حتى لو فشل بناء الأندرويد مثلاً بشرط نجاح الإلكترون
+    if: always() && (needs.build-electron.result == 'success' || needs.build-android.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./all-artifacts
+          path: ./artifacts
 
-      - name: Organize Files
+      - name: Organize Files for Release
         run: |
-          # تجميع ملفات الـ AppImage والـ APK في المجلد الرئيسي للرفع
-          find ./all-artifacts -name "*.AppImage" -exec cp {} . \;
-          find ./all-artifacts -name "*.apk" -exec cp {} . \;
+          # تجميع كل الملفات من المجلدات الفرعية إلى المجلد الرئيسي
+          find ./artifacts -name "*.AppImage" -exec cp {} . \;
+          find ./artifacts -name "*.apk" -exec cp {} . \;
           
-          # إنشاء ملف الفحص الأمني (بشرط وجود ملفات)
-          sha256sum *.AppImage *.apk > SHA256SUMS.txt || echo "No files to hash" > SHA256SUMS.txt
+          # إنشاء ملف البصمة الأمنية للملفات الموجودة
+          sha256sum *.AppImage *.apk > SHA256SUMS.txt || echo "فشل إنشاء ملف SHA256"
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "build-${{ github.run_number }}"
-          name: "Logseq Arabic RTL v${{ github.run_number }}"
-          body: "تم بناء هذه النسخة آلياً للتجربة. تشمل AppImage للينكس و APK للأندرويد."
+          tag_name: "release-${{ github.run_number }}"
+          name: "Logseq Arabic RTL Build #${{ github.run_number }}"
+          body: "بناء تجريبي للنسخة العربية (RTL). يشمل AppImage و APK."
           draft: true
-          prerelease: true
           files: |
             *.AppImage
             *.apk
