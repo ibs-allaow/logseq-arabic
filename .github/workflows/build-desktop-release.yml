@@ -86,6 +86,7 @@ jobs:
           ENABLE_FILE_SYNC: ${{ inputs.enable-file-sync-production }}
           ENABLE_PLUGINS: ${{ inputs.enable-plugins }}
         run: |
+          npx shadow-cljs release app browser-worker
           yarn release-electron
 
       - name: Upload Artifacts
