@@ -206,7 +206,7 @@ ul {
 }
 
 .property-block-container {
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 .ls-page-title .ls-page-icon svg, .ls-page-title .ls-page-icon button {
@@ -219,7 +219,7 @@ ul {
 }
 
 .ls-page-title {
-  margin-left: -3px;
+  margin-inline-start: -3px;
 }
 
 .ls-block[draggable="true"] {
@@ -381,10 +381,10 @@ div[data-radix-menu-content] {
 }
 
 .ls-foldable-title {
-    margin-left: -5px;
+    margin-inline-start: -5px;
 }
 .ls-foldable-title-control {
-    margin-left: 0px;
+    margin-inline-start: 0px;
 }
 
 .ls-number {
