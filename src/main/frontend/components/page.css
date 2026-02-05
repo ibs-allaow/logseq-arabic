@@ -45,7 +45,7 @@
 }
 
 .graph-filters ul {
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 .graph-filters li {
@@ -101,7 +101,7 @@
 
 a.page-title {
   padding: 0 8px;
-  margin-left: -8px;
+  margin-inline-start: -8px;
   transition: none;
   display: block;
   color: inherit;
@@ -144,7 +144,7 @@ html.is-native-iphone-without-notch {
   opacity: 0;
   color: var(--ls-primary-text-color);
   transform: scale(.8);
-  margin-left: -1px;
+  margin-inline-start: -1px;
 
 
   &:hover {
