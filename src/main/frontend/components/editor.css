@@ -95,11 +95,11 @@ pre {
 .cp__commands-slash {
   .ui__icon {
     opacity: .7;
-    margin-right: 1px;
+    margin-inline-end: 1px;
     color: inherit !important;
 
     &.ls-icon-queryCode {
-      @apply relative left-[1px];
+      @apply relative start-[1px];
     }
   }
 
