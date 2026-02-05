@@ -9,8 +9,8 @@
     width: fit-content;
     /* height:2rem; */
     order: 3;
-    left: auto;
-    right: 0;
+    right: auto; /**تم تعديله**/
+    left: 0; /**تم تعديله**/
     /* margin-top: 4px; */
     z-index: 9999;
     padding: 4px 6px;
