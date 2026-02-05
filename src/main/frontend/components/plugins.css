@@ -88,7 +88,7 @@
       }
 
       &.contribute {
-        @apply absolute top-[-42px] right-5 bg-transparent text-xs opacity-60 hidden sm:block;
+        @apply absolute top-[-42px] end-5 bg-transparent text-xs opacity-60 hidden sm:block;
       }
 
       &.load-unpacked {
@@ -104,7 +104,7 @@
           content: " ";
           position: absolute;
           top: -2px;
-          right: 4px;
+          end: 4px;
           background-color: red;
           width: 4px;
           height: 4px;
@@ -120,12 +120,12 @@
       position: relative;
 
       small.s1 {
-        left: 8px;
+        start: 8px;
         top: 6px;
       }
 
       small.s2 {
-        right: 4px;
+        end: 4px;
         top: 6px;
         user-select: none;
         cursor: pointer;
@@ -191,7 +191,7 @@
       max-height: 50px;
       overflow: hidden;
       line-height: 24px;
-      padding-right: 24px;
+      padding-inline-end: 24px;
 
       > .l {
         display: inline-block;
@@ -217,7 +217,7 @@
     .flag {
       position: absolute;
       bottom: 16px;
-      left: 0;
+      start: 0;
       width: 100%;
 
       > p {
@@ -232,8 +232,8 @@
       &.is-top {
         width: unset;
         top: 4px;
-        right: 6px;
-        left: unset;
+        end: 6px;
+        start: unset;
         bottom: unset;
 
         &:hover {
@@ -274,14 +274,14 @@
         @apply flex pl-2 items-center justify-between absolute w-full;
 
         bottom: -8px;
-        right: 7px;
+        end: 7px;
 
         .de {
           font-size: 10px;
           padding: 5px 2px;
-          padding-right: 3px;
+          padding-inline-end: 3px;
           border-radius: 2px;
-          margin-right: 5px;
+          margin-inline-end: 5px;
           user-select: none;
           transition: none;
           opacity: .2;
@@ -297,7 +297,7 @@
 
             background-color: var(--ls-primary-background-color);
             top: 22px;
-            left: 0;
+            start: 0;
             min-width: 120px;
 
             > li {
@@ -359,7 +359,7 @@
 
         > .l {
           @apply flex items-center;
-          margin-left: -70px;
+          margin-inline-start: -70px;
         }
 
         a.btn {
@@ -371,7 +371,7 @@
           border-radius: 2px;
           user-select: none;
           position: relative;
-          margin-left: 4px;
+          margin-inline-start: 4px;
 
           svg {
             opacity: .3;
@@ -398,13 +398,13 @@
             small {
               position: absolute;
               transform: scale(.5) translateX(-180%);
-              margin-right: 2px;
+              margin-inline-end: 2px;
             }
           }
         }
 
         .ui__toggle {
-          margin-left: 5px;
+          margin-inline-start: 5px;
         }
       }
     }
@@ -415,7 +415,7 @@
       }
 
       .ctl {
-        padding-left: 12px;
+        padding-inline-start: 12px;
         bottom: -5px;
       }
     }
@@ -469,7 +469,7 @@
       @apply relative pt-2.5 pb-5 px-0;
 
       > .edit-file {
-        @apply absolute top-3 right-2;
+        @apply absolute top-3 end-2;
       }
 
       &[data-mode=code] {
@@ -504,7 +504,7 @@
           align-items: center;
 
           code {
-            margin-right: 4px;
+            margin-inline-end: 4px;
             line-height: 1.2;
           }
         }
@@ -556,14 +556,14 @@
           flex-wrap: wrap;
 
           label {
-            padding-right: 15px;
+            padding-inline-end: 15px;
             user-select: none;
             white-space: nowrap;
             margin-top: 2px;
           }
 
           input {
-            margin-right: 6px;
+            margin-inline-end: 6px;
           }
         }
 
@@ -654,8 +654,8 @@
   width: 100%;
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
+  start: 0;
+  end: 0;
   bottom: 0;
   margin: 0;
   padding: 0;
@@ -663,7 +663,7 @@
   &-container {
     position: absolute;
     top: 0;
-    left: 0;
+    start: 0;
     z-index: -1;
     visibility: hidden;
     display: none;
@@ -690,7 +690,7 @@
         user-select: none;
         position: absolute;
         top: 0;
-        left: 0;
+        start: 0;
         width: 100%;
         overflow: hidden;
 
@@ -709,7 +709,7 @@
 
           > .r {
             position: absolute;
-            right: 0;
+            end: 0;
             top: 0;
           }
 
@@ -759,7 +759,7 @@
       > .resizable-handle {
         position: absolute;
         bottom: -1px;
-        right: -1px;
+        end: -1px;
         height: 15px;
         width: 15px;
         z-index: 2;
@@ -779,12 +779,12 @@
 }
 
 .lsp-daemon-container {
-  @apply fixed top-0 left-0 z-10;
+  @apply fixed top-0 start-0 z-10;
 }
 
 .lsp-ui-float-container {
   top: 40%;
-  left: 30%;
+  start: 30%;
   border: 2px solid var(--ls-border-color);
   border-radius: 6px;
   overflow: hidden;
@@ -864,7 +864,7 @@
     .pin {
       position: absolute;
       top: 0;
-      right: 0;
+      end: 0;
       height: 100%;
       padding: 0 6px;
 
@@ -895,12 +895,12 @@
     @apply relative;
 
     > .actions {
-      @apply absolute top-2 right-1 z-10 opacity-0 transition-opacity;
+      @apply absolute top-2 end-1 z-10 opacity-0 transition-opacity;
 
       .ui__button {
         font-size: 13px;
         padding: 4px;
-        margin-left: 6px;
+        margin-inline-start: 6px;
       }
     }
 
@@ -971,7 +971,7 @@ body[data-page=plugins] {
   .cp__sidebar-main-content {
     max-width: 1280px !important;
     width: 80%;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-inline-start: 30px;
+    padding-inline-end: 30px;
   }
 }
