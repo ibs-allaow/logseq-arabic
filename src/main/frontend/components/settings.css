@@ -84,7 +84,7 @@
 
     &.no-aside {
       > article {
-        padding-left: 0;
+        padding-inline-start: 0;
       }
     }
 
@@ -193,7 +193,7 @@
           display: inline-block;
           position: relative;
           top: -1px;
-          margin-right: 2px;
+          margin-inline-end: 2px;
         }
 
         &:hover {
@@ -212,7 +212,7 @@
 
       > select {
         min-width: 100px;
-        margin-left: -14px !important;
+        margin-inline-start: -14px !important;
         padding: 4px 10px !important;
       }
 
@@ -340,7 +340,7 @@
         &:hover {
           i.ti {
             width: 14px;
-            padding-left: 2px;
+            padding-inline-start: 2px;
           }
         }
       }
@@ -370,7 +370,7 @@
       .item-results-wrap {
         position: absolute;
         top: 24px;
-        left: 0;
+        start: 0;
         z-index: 1;
         width: 100px;
         max-height: 180px;
@@ -405,7 +405,7 @@
       @apply py-1.5 text-lg px-1 my-0;
 
       strong {
-        @apply inline-block pr-4 text-right w-40 opacity-70;
+        @apply inline-block pr-4 text-start w-40 opacity-70;
       }
     }
   }
@@ -448,12 +448,12 @@ html.is-native-iphone-without-notch {
 }
 
 svg.git {
-  margin-left: -4px;
+  margin-inline-start: -4px;
   transform: scale(0.9);
 }
 
 svg.cmd {
-  margin-left: -1px;
+  margin-inline-start: -1px;
 }
 
 body[data-settings-tab=keymap] {
