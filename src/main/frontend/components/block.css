@@ -13,11 +13,11 @@
     /* FIXME: img macros */
 
     &.left {
-      float: left;
+      float: inline-start;
     }
 
     &.right {
-      float: right;
+      float: inline-end;
     }
 
     &.loading-asset {
@@ -27,7 +27,7 @@
 
   .draw [aria-labelledby="shapes-title"] {
     position: absolute;
-    left: 50%;
+    start: 50%;
     transform: translate(-50%);
   }
 
@@ -60,11 +60,11 @@
   .icon-emoji-wrap {
     position: relative;
     top: 0.08em;
-    padding-left: 1px;
+    : 1px;
 
     &.as-emoji {
       top: 0.02em;
-      padding-right: 1px;
+      padding-linline-end: 1px;
     }
   }
 
@@ -145,7 +145,7 @@
 
 .block-body ol {
   list-style-position: inside;
-  margin-left: 0;
+  margin-linline-start: 0;
 
   > li {
     &::marker,
@@ -186,11 +186,11 @@
 
 .block-children {
   border-inline-start: 1px solid;
-  border-left-color: var(--lx-gray-04-alpha, var(--ls-guideline-color, var(--rx-gray-04-alpha))) !important;
+  border-linline-start-color: var(--lx-gray-04-alpha, var(--ls-guideline-color, var(--rx-gray-04-alpha))) !important;
 }
 
 .hidden-block .block-children {
-  border-left: 0;
+  border-linline-start: 0;
 }
 
 .block-control-wrap, .ls-page-title .property-value .block-control-wrap {
@@ -200,7 +200,7 @@
     @apply mr-0 pr-0;
 
     .bullet-link-wrap {
-      @apply relative left-[-3px];
+      @apply relative start-[-3px];
     }
   }
 
@@ -224,7 +224,7 @@
   }
 
   &.bullet-hidden {
-    padding-right: 2px;
+    padding-linline-end: 2px;
   }
 }
 
@@ -421,7 +421,7 @@
     &:before {
       content: "[[📜";
       opacity: .7;
-      margin-right: 4px;
+      margin-linline-end: 4px;
     }
 
     &:after {
@@ -520,7 +520,7 @@
 .ls-page-title-container .block-content-wrapper {
   .ls-page-title-actions {
     @apply absolute -top-5 opacity-0;
-    left: -2px;
+    start: -2px;
   }
 
   &:hover {
@@ -830,14 +830,14 @@
 }
 
 .content.doc-mode {
-  margin-left: -16px;
+  margin-linline-start: -16px;
 
   .block-children-left-border {
     display: none;
   }
 
   .block-children {
-    border-left: none;
+    border-linline-start: none;
   }
 
   .hide-inner-bullet .bullet {
@@ -845,7 +845,7 @@
   }
 
   .block-children-container {
-    margin-left: 18px;
+    margin-linline-start: 18px;
   }
 }
 
@@ -870,7 +870,7 @@
   video {
     position: absolute;
     top: 0;
-    left: 0;
+    start: 0;
     bottom: 0;
     height: 100%;
     width: 100%;
@@ -962,7 +962,7 @@ html.is-mac {
       @apply ml-3;
 
       .block-control {
-        @apply relative right-[-5px] top-[1px];
+        @apply relative end-[-5px] top-[1px];
       }
     }
   }
@@ -971,13 +971,13 @@ html.is-mac {
     @apply bg-gray-03 rounded p-4;
 
     > .only-page-blocks {
-      @apply relative -left-[11px];
+      @apply relative -start-[11px];
     }
 
     .with-foldable-page {
       > .preview-ref-link {
         .page-ref .ui__icon.ti {
-          @apply top-[2px] left-0;
+          @apply top-[2px] start-0;
         }
       }
     }
@@ -1109,7 +1109,7 @@ html.is-mac {
 }
 
 .ls-page-title .positioned-properties.block-below {
-  margin-left: 7px;
+  margin-linline-start: 7px;
 }
 
 .ls-page-title .ls-properties-area .positioned-properties.block-left svg,
@@ -1159,7 +1159,7 @@ html.is-mac {
   }
 
   > .code-block-actions {
-    @apply flex flex-row gap-1 opacity-0 transition-opacity ease-in duration-300 absolute right-1 top-1 select-none z-[1] text-xs bg-gray-01;
+    @apply flex flex-row gap-1 opacity-0 transition-opacity ease-in duration-300 absolute end-1 top-1 select-none z-[1] text-xs bg-gray-01;
 
     button {
       @apply !py-0 h-4 text-muted-foreground hover:text-foreground text-xs px-1;
@@ -1177,12 +1177,12 @@ html.is-mac {
 
   .handle-left, .handle-right {
     @apply absolute w-[6px] h-[15%] min-h-[30px] bg-black/30 hover:bg-black/70
-    top-[50%] left-[5px] rounded-full cursor-col-resize select-none
+    top-[50%] start-[5px] rounded-full cursor-col-resize select-none
     translate-y-[-20%] opacity-0 border border-gray-200;
   }
 
   .handle-right {
-    @apply left-auto right-[5px]
+    @apply start-auto end-[5px]
   }
 
   &:hover {
@@ -1224,7 +1224,7 @@ html.is-mac {
     @apply relative inline-block mt-2 w-full;
 
     .asset-action-bar {
-        @apply top-1 right-1 absolute flex items-center opacity-0 transition-opacity;
+        @apply top-1 end-1 absolute flex items-center opacity-0 transition-opacity;
 
         &[data-popup-active] {
             @apply opacity-100;
