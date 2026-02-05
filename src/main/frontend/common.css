@@ -130,7 +130,7 @@ body {
   }
 
   html blockquote, .block-content-or-editor-wrap[data-node-type='quote']  {
-    border-left-color: var(--ls-page-blockquote-border-color, var(--lx-gray-05-alpha, hsl(var(--primary)/.4)));
+    border-inline-start-color: var(--ls-page-blockquote-border-color, var(--lx-gray-05-alpha, hsl(var(--primary)/.4)));
   }
 
   .block-content-or-editor-wrap[data-node-type='quote'] {
@@ -172,7 +172,7 @@ body {
 .ls-center {
   position: absolute;
   top: 50%;
-  right: 50%; /** تم تعديله **/
+  start: 50%; /** تم تعديله **/
   transform: translate(-50%, -50%);
 }
 
@@ -364,8 +364,8 @@ a.star-page:hover {
 }
 
 button.menu {
-  border-right: 1px solid;
-  border-right-color: var(--ls-secondary-background-color, #f0f8ff);
+  border-inline-end: 1px solid;
+  border-inline-end-color: var(--ls-secondary-background-color, #f0f8ff);
   color: var(--ls-link-text-color, #24292e);
 }
 
@@ -383,7 +383,7 @@ button.menu:focus {
 }
 
 .menu-backdrop {
-  @apply w-full h-full fixed top-0 right-0; /** تم تعديله **/
+  @apply w-full h-full fixed top-0 start-0; /** تم تعديله **/
 
   z-index: var(--ls-z-index-level-1);
 }
@@ -408,12 +408,12 @@ a.login:hover {
 a.tooltip-priority {
   display: contents;
   position: absolute;
-  right: 0; /**تم تعديله**/
+  start: 0; /**تم تعديله**/
 }
 
 a.tooltip-priority::after {
   content: attr(priority);
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 
 a.chosen {
@@ -619,7 +619,7 @@ mark > code {
 }
 
 #help-latex .katex-html {
-  text-align: right;
+  text-align: end;
 }
 
 a.page-op svg {
