@@ -349,7 +349,7 @@ div[data-radix-popper-content-wrapper] {
       @apply relative pr-3 mr-3;
 
       select {
-        @apply absolute px-2 py-0 border left-0 z-[2] opacity-0 bg-none;
+        @apply absolute px-2 py-0 border right-0 z-[2] opacity-0 bg-none; /**تم تعديله**/
       }
 
       > .text-sm {
