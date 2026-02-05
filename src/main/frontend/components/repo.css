@@ -55,7 +55,7 @@
     }
 
     .dropdown-caret {
-      @apply relative border-t-gray-09 left-1.5 top-[2px];
+      @apply relative border-t-gray-09 right-1.5 top-[2px]; /**تم تعديله**/
     }
   }
 }
@@ -89,7 +89,7 @@
     }
 
     > .ui__icon {
-      @apply absolute -right-1 top-2 opacity-40;
+      @apply absolute -left-1 top-2 opacity-40; /**تم تعديله**/
     }
   }
 
