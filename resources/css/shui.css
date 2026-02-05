@@ -68,9 +68,10 @@ html {
       --lx-bg-override: var(--rx-gray-03-alpha);
     }
 
-    .block-children-left-border:hover {
-      --ls-block-left-color: var(--rx-logseq-11);
-    }
+.block-children-left-border:hover {
+    --ls-block-inline-start-color: var(--rx-logseq-11); /**تم التعديل وإبقاء السطر السابق تحته للاحتياط**/
+    --ls-block-left-color: var(--rx-logseq-11);
+}
   }
 
   &[data-color=none] {
@@ -349,14 +350,14 @@ div[data-radix-popper-content-wrapper] {
       @apply relative pr-3 mr-3;
 
       select {
-        @apply absolute px-2 py-0 border right-0 z-[2] opacity-0 bg-none; /**تم تعديله**/
+        @apply absolute px-2 py-0 border start-0 z-[2] opacity-0 bg-none; /**تم تعديله**/
       }
 
       > .text-sm {
         @apply w-full z-[1];
 
         svg {
-          @apply absolute right-0 top-[6px];
+          @apply absolute end-0 top-[6px];
         }
       }
     }
@@ -366,7 +367,7 @@ div[data-radix-popper-content-wrapper] {
     }
 
     & + div {
-      @apply absolute -right-1 flex gap-2;
+      @apply absolute -end-1 flex gap-2;
 
       button[name=previous-month] {
         @apply relative;
@@ -393,14 +394,14 @@ div[data-radix-popper-content-wrapper] {
   }
 
   .del-date-btn {
-    @apply absolute right-[4px] top-[17px] px-1 opacity-70 hover:opacity-100
+    @apply absolute end-[4px] top-[17px] px-1 opacity-70 hover:opacity-100
     active:opacity-80 hover:text-red-rx-09 rounded-md !h-6 !w-6;
   }
 
   &.has-del-btn {
     .rdp-caption_dropdowns {
       & + div {
-        @apply right-5;
+        @apply end-5;
       }
     }
   }
