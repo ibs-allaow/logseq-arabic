@@ -1,5 +1,5 @@
 .cp__header {
-  @apply shadow z-10 flex items-center justify-between sticky top-0 left-0 right-0 leading-none whitespace-nowrap;
+  @apply shadow z-10 flex items-center justify-between sticky top-0 start-0 end-0 leading-none whitespace-nowrap;
 
   -webkit-app-region: drag;
 
@@ -8,7 +8,7 @@
   height: calc(var(--ls-headbar-height) + var(--ls-headbar-inner-top-padding));
 
   > .l {
-    @apply pl-2 h-full min-w-[var(--ls-left-sidebar-width)];
+    @apply ps-2 h-full min-w-[var(--ls-left-sidebar-width)];
 
     > div {
       @apply items-center;
@@ -50,7 +50,7 @@
     margin-top: 0;
     line-height: 0;
     top: 0;
-    left: 40%;
+    start: 40%;
     transform: translateX(-50%);
     z-index: 1000;
 
@@ -73,12 +73,12 @@
 
       svg {
         color: currentColor !important;
-        margin-right: 2px;
+        margin-inline-end: 2px;
       }
 
       > strong {
         display: inline-block;
-        padding-left: 2px;
+        padding-inline-start: 2px;
         cursor: pointer;
       }
     }
@@ -104,12 +104,12 @@
 
 .is-electron.is-mac .cp__header {
   > .l {
-    padding-left: 78px;
+    padding-inline-start: 78px;
   }
 }
 
 .is-electron.is-mac.is-fullscreen .cp__header > .l {
-  padding-left: 1rem;
+  padding-inline-start: 1rem;
 }
 
 /* Workaround for Linux Intel GPU text rendering issue GH#7233 */
@@ -199,13 +199,13 @@ html.is-native-ipad {
   }
 
   #main-content-container {
-    padding-left: 22px;
-    padding-right: 14px;
+    padding-inline-start: 22px;
+    padding-inline-end: 14px;
     padding-top: 0;
     height: calc(100vh - var(--ls-headbar-inner-top-padding) - var(--ls-headbar-height));
 
     @screen sm {
-      padding-left: 2rem;
+      padding-inline-start: 2rem;
     }
 
     .page {
