@@ -120,13 +120,13 @@ ul {
     }
 
     .ls-block .block-control {
-      @apply !right-5 !top-1;
+      @apply !end-5 !top-1;
     }
   }
 }
 
 .view-actions {
-  @apply absolute right-0;
+  @apply absolute end-0;
 }
 
 .app-login-modal {
