@@ -135,7 +135,7 @@
           @apply relative border pl-12 py-5;
 
           .variant-icon {
-            @apply absolute left-[14px] top-[19px] flex items-center;
+            @apply absolute right-[14px] top-[19px] flex items-center;
           }
 
           &.info .variant-icon {
@@ -160,7 +160,7 @@
 
   .ui__alert {
     > .ui__icon {
-      @apply absolute top-4 left-4;
+      @apply absolute top-4 right-4;
 
       & ~ * {
         @apply pl-7;
@@ -170,7 +170,7 @@
 
   .ui__dialog {
     &-overlay {
-      @apply top-0 left-0 right-0 bottom-0 grid place-items-center overflow-y-auto;
+      @apply top-0 right-0 right-0 bottom-0 grid place-items-center overflow-y-auto;
     }
   }
 }
