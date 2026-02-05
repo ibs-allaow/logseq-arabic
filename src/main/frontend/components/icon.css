@@ -4,7 +4,7 @@
   @apply w-[380px] max-h-[408px] relative flex flex-col overflow-hidden;
 
   > .hd {
-    @apply absolute w-full pt-2.5 pb-1 px-3 top-[38px] right-0; /**تم تعديله**/
+    @apply absolute w-full pt-2.5 pb-1 px-3 top-[38px] start-0; /**تم تعديله**/
   }
 
   > .bd {
@@ -16,7 +16,7 @@
   }
 
   > .ft {
-    @apply absolute w-full py-3 px-3 bg-gray-02 top-[-1px] right-0; /**تم تعديله**/
+    @apply absolute w-full py-3 px-3 bg-gray-02 top-[-1px] start-0; /**تم تعديله**/
     @apply flex items-center border-t h-[40px] overflow-hidden;
 
     .tab-item {
@@ -32,12 +32,12 @@
     @apply relative;
 
     .ls-icon-search {
-      @apply absolute right-2.5 top-[8px] opacity-50; /**تم تعديله**/
+      @apply absolute start-2.5 top-[8px] opacity-50; /**تم تعديله**/
     }
 
     > .x {
       @apply flex items-center h-full px-2 opacity-50;
-      @apply absolute right-0 top-0 hover:opacity-80;
+      @apply absolute start-0 top-0 hover:opacity-80;
     }
 
     .ui__input {
