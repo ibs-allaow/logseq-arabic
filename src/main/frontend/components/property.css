@@ -22,15 +22,15 @@
 }
 
 .ls-page-properties > .ls-properties-area > .property-block {
-  margin-left: -22px;
+  margin-inline-start: -22px;
 }
 
 .ls-block .ls-properties-area {
-  margin-left: 0;
+  margin-inline-start: 0;
 }
 
 .ls-block .property-pair, .ls-sidebar-page-properties .property-pair, .property-block .property-value, .block-property-value {
-  margin-left: 7px;
+  margin-inline-start: 7px;
 }
 
 .grid-auto-fit {
@@ -49,7 +49,7 @@
     @apply relative;
 
     &-id {
-        @apply absolute left-[-19px] top-[3px] rounded-full leading-none
+        @apply absolute start-[-19px] top-[3px] rounded-full leading-none
         flex items-center justify-center bg-primary text-primary-foreground border-none
         text-xs min-w-[20px] min-h-[20px] scale-95;
     }
@@ -57,7 +57,7 @@
 
 .ls-new-property .jtrigger {
     &-id {
-      @apply left-[-11px] top-[2px];
+      @apply start-[-11px] top-[2px];
     }
 }
 
@@ -67,7 +67,7 @@
 
     .jtrigger-view {
       > .jtrigger-id {
-        @apply left-[-11px];
+        @apply start-[-11px];
       }
 
       &:has(> .jtrigger-id) {
@@ -82,7 +82,7 @@
 
       .jtrigger {
         &-id {
-          @apply left-[16px];
+          @apply start-[16px];
         }
       }
     }
@@ -91,12 +91,12 @@
       @apply pl-1 min-h-[28px];
 
       .jtrigger-id {
-        @apply left-[-34px] top-[2px];
+        @apply start-[-34px] top-[2px];
       }
 
       &-inner[data-type=checkbox] {
         .jtrigger-id {
-          @apply left-[-44px] top-[-2px];
+          @apply start-[-44px] top-[-2px];
         }
       }
 
@@ -140,7 +140,7 @@
       position: absolute;
 
       .dropdown-wrapper {
-        left: 0;
+        start: 0;
       }
     }
   }
@@ -242,7 +242,7 @@ input.simple-input:focus {
       position: absolute;
 
       .dropdown-wrapper {
-        left: 0;
+        start: 0;
       }
     }
 
@@ -386,7 +386,7 @@ a.control-link {
       @apply opacity-70 select-none cursor-not-allowed;
 
       > label {
-        @apply flex items-center gap-1 opacity-40 relative top-[2px] right-[1px];
+        @apply flex items-center gap-1 opacity-40 relative top-[2px] end-[1px];
       }
     }
 
