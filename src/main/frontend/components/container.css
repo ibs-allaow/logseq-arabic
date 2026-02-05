@@ -1,7 +1,7 @@
 @supports (padding: max(0px)) {
   .post {
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    padding-inline-start: max(12px, env(safe-area-inset-inline-start));
+    padding-inline-end: max(12px, env(safe-area-inset-inline-end));
   }
 }
 
@@ -16,7 +16,7 @@
 #skip-to-main {
   @apply fixed p-2 rounded;
 
-  left: 50%;
+  start: 50%;
   transform: translate(-50%, 0);
   background-color: var(--ls-secondary-background-color);
   top: -100px;
@@ -38,13 +38,13 @@
   overflow-y: hidden;
   position: relative;
   height: 100%;
-  transition: padding-left .3s;
+  transition: padding-inline-start .3s;
 
   &.is-left-sidebar-open {
-    padding-left: 0;
+    padding-inline-start: 0;
 
     @screen sm {
-      padding-left: var(--ls-left-sidebar-width);
+      padding-inline-start: var(--ls-left-sidebar-width);
     }
   }
 }
@@ -65,7 +65,7 @@
 
     width: var(--ls-left-sidebar-sm-width);
     background-color: var(--left-sidebar-bg-color);
-    border-right: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
+    border-inline-end: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
   }
 
   > .wrap {
@@ -313,7 +313,7 @@
 
 
 .cp__sidebar-left-layout {
-  @apply fixed top-0 left-0 w-[10px] z-[var(--ls-z-index-level-4)];
+  @apply fixed top-0 start-0 w-[10px] z-[var(--ls-z-index-level-4)];
 
   a {
     @apply opacity-80 hover:opacity-100 text-foreground;
@@ -327,9 +327,9 @@
     background-color: rgba(0, 0, 0, .7);
     position: absolute;
     top: 0;
-    left: 0;
+    start: 0;
     bottom: 0;
-    right: 0;
+    end: 0;
     z-index: 1;
     opacity: 0;
     transition: opacity .4s;
@@ -389,14 +389,14 @@
     height: 3rem;
     background-color: var(--ls-primary-background-color);
     position: fixed;
-    left: 0;
+    start: 0;
     top: 0;
     opacity: 1;
     z-index: 5;
   }
 
   .left-sidebar-resizer {
-    @apply absolute w-[3px] top-0 right-[-2px] bottom-0 overflow-hidden cursor-col-resize;
+    @apply absolute w-[3px] top-0 end-[-2px] bottom-0 overflow-hidden cursor-col-resize;
     @apply z-10 transition-[background-color] duration-200 delay-300;
 
     &.is-active, &:hover,
@@ -438,20 +438,20 @@
 .ls-window-controls {
   &.ls-right-sidebar-open {
     .cp__right-sidebar-topbar {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
 
   &:not(.ls-right-sidebar-open) {
     .cp__header > .r {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
@@ -499,7 +499,7 @@
   }
 
   &-btn {
-    @apply fixed bottom-4 right-4 sm:right-8 opacity-70 hover:opacity-100;
+    @apply fixed bottom-4 end-4 sm:end-8 opacity-70 hover:opacity-100;
 
     > .inner {
       @apply rounded-full h-8 w-8 flex items-center justify-center
@@ -510,7 +510,7 @@
   }
 
   &-menu-popup {
-    @apply fixed bottom-14 right-8 z-10 border rounded-lg min-w-[260px] shadow;
+    @apply fixed bottom-14 end-8 z-10 border rounded-lg min-w-[260px] shadow;
 
     background-color: var(--ls-secondary-background-color, var(--rx-gray-03));
 
@@ -539,7 +539,7 @@
   user-select: none;
 
   .resizer {
-    @apply absolute top-0 bottom-0 touch-none left-[1px] w-[3px] select-none;
+    @apply absolute top-0 bottom-0 touch-none start-[1px] w-[3px] select-none;
     @apply cursor-col-resize hover:bg-primary/90 focus:bg-primary/90 active:bg-primary/90;
     @apply z-[1000] delay-300 transition-[background-color] duration-200;
   }
@@ -582,8 +582,8 @@
     position: sticky;
     position: -webkit-sticky;
     top: 0;
-    left: 0;
-    right: 0;
+    start: 0;
+    end: 0;
     background-color: or(--ls-right-sidebar-topbar-color, --lx-gray-02, --ls-secondary-background-color, #d8e1e8);
     z-index: 999;
     user-select: none;
@@ -636,7 +636,7 @@
       .breadcrumb {
         margin-top: 0;
         margin-bottom: 0;
-        text-align: left;
+        text-align: start;
       }
     }
 
@@ -725,7 +725,7 @@
 }
 
 li.dragging-target {
-  border-left: 5px solid green;
+  border-inline-start: 5px solid green;
 }
 
 .full-height-without-header {
