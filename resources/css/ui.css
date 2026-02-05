@@ -73,10 +73,10 @@
 
 .container {
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  padding-inline-start: 2rem;
+  padding-inline-end: 2rem;
 }
 
 @media (width >= 1400px) {
@@ -106,7 +106,7 @@
   border-width: 1px;
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
-  padding-left: 3rem;
+  padding-inline-start: 3rem;
   position: relative;
 }
 
@@ -115,7 +115,7 @@
   display: flex;
   position: absolute;
   top: 19px;
-  left: 14px;
+  start: 14px;
 }
 
 .ui__toaster-viewport > li.has-variant-icon.info .variant-icon {
@@ -137,11 +137,11 @@
 .ui__alert > .ui__icon {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  start: 1rem;
 }
 
 .ui__alert > .ui__icon ~ * {
-  padding-left: 1.75rem;
+  padding-inline-start: 1.75rem;
 }
 
 .ui__dialog-overlay {
@@ -200,31 +200,31 @@
 }
 
 .left-1 {
-  left: .25rem;
+  start: .25rem;
 }
 
 .left-2 {
-  left: .5rem;
+  start: .5rem;
 }
 
 .left-\[50\%\] {
-  left: 50%;
+  start: 50%;
 }
 
 .right-0 {
-  right: 0;
+  end: 0;
 }
 
 .right-1 {
-  right: .25rem;
+  end: .25rem;
 }
 
 .right-2 {
-  right: .5rem;
+  end: .5rem;
 }
 
 .right-4 {
-  right: 1rem;
+  end: 1rem;
 }
 
 .top-0 {
@@ -276,13 +276,13 @@
 }
 
 .-mx-1 {
-  margin-left: -.25rem;
-  margin-right: -.25rem;
+  margin-inline-start: -.25rem;
+  margin-inline-end: -.25rem;
 }
 
 .-mx-6 {
-  margin-left: -1.5rem;
-  margin-right: -1.5rem;
+  margin-inline-start: -1.5rem;
+  margin-inline-end: -1.5rem;
 }
 
 .my-1 {
@@ -301,11 +301,11 @@
 }
 
 .-ml-px {
-  margin-left: -1px;
+  margin-inline-start: -1px;
 }
 
 .-mr-px {
-  margin-right: -1px;
+  margin-inline-end: -1px;
 }
 
 .-mt-1 {
@@ -337,15 +337,15 @@
 }
 
 .ml-auto {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .mr-2 {
-  margin-right: .5rem;
+  margin-inline-end: .5rem;
 }
 
 .mr-6 {
-  margin-right: 1.5rem;
+  margin-inline-end: 1.5rem;
 }
 
 .mt-2 {
@@ -707,26 +707,26 @@
 
 .space-x-1 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-right: calc(.25rem * var(--tw-space-x-reverse));
-  margin-left: calc(.25rem * calc(1 - var(--tw-space-x-reverse)));
+  margin-inline-end: calc(.25rem * var(--tw-space-x-reverse));
+  margin-inline-start: calc(.25rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-right: calc(.5rem * var(--tw-space-x-reverse));
-  margin-left: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
+  margin-inline-end: calc(.5rem * var(--tw-space-x-reverse));
+  margin-inline-start: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-x-3 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-right: calc(.75rem * var(--tw-space-x-reverse));
-  margin-left: calc(.75rem * calc(1 - var(--tw-space-x-reverse)));
+  margin-inline-end: calc(.75rem * var(--tw-space-x-reverse));
+  margin-inline-start: calc(.75rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
-  margin-right: calc(1rem * var(--tw-space-x-reverse));
-  margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+  margin-inline-end: calc(1rem * var(--tw-space-x-reverse));
+  margin-inline-start: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-y-0 > :not([hidden]) ~ :not([hidden]) {
@@ -810,24 +810,24 @@
 }
 
 .rounded-t {
-  border-top-left-radius: .25rem;
-  border-top-right-radius: .25rem;
+  border-start-start-radius: .25rem;
+  border-start-end-radius: .25rem;
 }
 
 .rounded-bl {
-  border-bottom-left-radius: .25rem;
+  border-end-start-radius: .25rem;
 }
 
 .rounded-br {
-  border-bottom-right-radius: .25rem;
+  border-end-end-radius: .25rem;
 }
 
 .rounded-tl {
-  border-top-left-radius: .25rem;
+  border-start-start-radius: .25rem;
 }
 
 .rounded-tr {
-  border-top-right-radius: .25rem;
+  border-start-end-radius: .25rem;
 }
 
 .border {
@@ -1003,43 +1003,43 @@
 }
 
 .px-2 {
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-inline-start: .5rem;
+  padding-inline-end: .5rem;
 }
 
 .px-2\.5 {
-  padding-left: .625rem;
-  padding-right: .625rem;
+  padding-inline-start: .625rem;
+  padding-inline-end: .625rem;
 }
 
 .px-3 {
-  padding-left: .75rem;
-  padding-right: .75rem;
+  padding-inline-start: .75rem;
+  padding-inline-end: .75rem;
 }
 
 .px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-inline-start: 1rem;
+  padding-inline-end: 1rem;
 }
 
 .px-6 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-inline-start: 1.5rem;
+  padding-inline-end: 1.5rem;
 }
 
 .px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-inline-start: 2rem;
+  padding-inline-end: 2rem;
 }
 
 .px-\[0\.25rem\] {
-  padding-left: .25rem;
-  padding-right: .25rem;
+  padding-inline-start: .25rem;
+  padding-inline-end: .25rem;
 }
 
 .px-\[0\.75rem\] {
-  padding-left: .75rem;
-  padding-right: .75rem;
+  padding-inline-start: .75rem;
+  padding-inline-end: .75rem;
 }
 
 .py-0 {
@@ -1092,31 +1092,31 @@
 }
 
 .pl-1 {
-  padding-left: .25rem;
+  padding-inline-start: .25rem;
 }
 
 .pl-4 {
-  padding-left: 1rem;
+  padding-inline-start: 1rem;
 }
 
 .pl-8 {
-  padding-left: 2rem;
+  padding-inline-start: 2rem;
 }
 
 .pr-1 {
-  padding-right: .25rem;
+  padding-inline-end: .25rem;
 }
 
 .pr-2 {
-  padding-right: .5rem;
+  padding-inline-end: .5rem;
 }
 
 .pr-3 {
-  padding-right: .75rem;
+  padding-inline-end: .75rem;
 }
 
 .pr-8 {
-  padding-right: 2rem;
+  padding-inline-end: 2rem;
 }
 
 .pt-0 {
@@ -1587,7 +1587,7 @@
 }
 
 .hover\:bg-gradient-to-r:hover {
-  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  background-image: linear-gradient(to end, var(--tw-gradient-stops));
 }
 
 .hover\:text-accent-foreground:hover {
@@ -1972,7 +1972,7 @@
   }
 
   .sm\:right-0 {
-    right: 0;
+    end: 0;
   }
 
   .sm\:mt-0 {
@@ -1993,14 +1993,14 @@
 
   .sm\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
-    margin-right: calc(.5rem * var(--tw-space-x-reverse));
-    margin-left: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
+    margin-inline-end: calc(.5rem * var(--tw-space-x-reverse));
+    margin-inline-start: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .sm\:space-x-4 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
-    margin-right: calc(1rem * var(--tw-space-x-reverse));
-    margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+    margin-inline-end: calc(1rem * var(--tw-space-x-reverse));
+    margin-inline-start: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .sm\:space-y-0 > :not([hidden]) ~ :not([hidden]) {
@@ -2038,8 +2038,8 @@
 }
 
 .last\:\[\&\:has\(\[aria-selected\]\)\]\:rounded-r-md:has([aria-selected]):last-child {
-  border-top-right-radius: calc(var(--radius)  - 2px);
-  border-bottom-right-radius: calc(var(--radius)  - 2px);
+  border-start-end-radius: calc(var(--radius)  - 2px);
+  border-end-end-radius: calc(var(--radius)  - 2px);
 }
 
 .\[\&\:has\(\[aria-selected\]\.day-outside\)\]\:bg-accent\/50:has([aria-selected].day-outside) {
@@ -2047,8 +2047,8 @@
 }
 
 .\[\&\:has\(\[aria-selected\]\.day-range-end\)\]\:rounded-r-md:has([aria-selected].day-range-end) {
-  border-top-right-radius: calc(var(--radius)  - 2px);
-  border-bottom-right-radius: calc(var(--radius)  - 2px);
+  border-start-end-radius: calc(var(--radius)  - 2px);
+  border-end-end-radius: calc(var(--radius)  - 2px);
 }
 
 .\[\&\>span\]\:line-clamp-1 > span {
@@ -2084,12 +2084,12 @@
 }
 
 .\[\&\>svg\~\*\]\:pl-7 > svg ~ * {
-  padding-left: 1.75rem;
+  padding-inline-start: 1.75rem;
 }
 
 .\[\&_\[cmdk-group-heading\]\]\:px-2 [cmdk-group-heading] {
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-inline-start: .5rem;
+  padding-inline-end: .5rem;
 }
 
 .\[\&_\[cmdk-group-heading\]\]\:py-1\.5 [cmdk-group-heading] {
@@ -2115,8 +2115,8 @@
 }
 
 .\[\&_\[cmdk-group\]\]\:px-2 [cmdk-group] {
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-inline-start: .5rem;
+  padding-inline-end: .5rem;
 }
 
 .\[\&_\[cmdk-input-wrapper\]_svg\]\:h-5 [cmdk-input-wrapper] svg {
@@ -2132,8 +2132,8 @@
 }
 
 .\[\&_\[cmdk-item\]\]\:px-2 [cmdk-item] {
-  padding-left: .5rem;
-  padding-right: .5rem;
+  padding-inline-start: .5rem;
+  padding-inline-end: .5rem;
 }
 
 .\[\&_\[cmdk-item\]\]\:py-3 [cmdk-item] {
