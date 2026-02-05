@@ -6,12 +6,12 @@
 .cp__filters-input-panel {
   background-color: var(--ls-primary-background-color);
   border-radius: 0.25rem;
-  padding-left: 0.5rem;
+  padding-inline-start: 0.5rem;
   align-items: center;
 }
 
 .references-blocks .breadcrumb {
-  margin-left: 1.5rem;
+  margin-inline-start: 1.5rem;
 }
 
 .ls-filters {
