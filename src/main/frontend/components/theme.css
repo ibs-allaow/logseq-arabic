@@ -99,12 +99,12 @@ html.is-resizing-buf {
 
 main.ls-fold-button-on-right {
   #main-content-container {
-    padding-right: 18px;
-    padding-left: 18px;
+    padding-end: 18px; /**تم تعديله**/
+    padding-start: 18px; /**تم تعديله**/
     padding-top: 4px;
 
     .page-blocks-inner {
-      margin-left: 0 !important;
+      margin-inline-start: 0 !important;
     }
 
     .block-control-wrap {
@@ -115,7 +115,7 @@ main.ls-fold-button-on-right {
   }
 
   .block-main-container {
-    padding-right: calc(1.2rem + env(safe-area-inset-right, 0px)); /* leave room for the right fold toggle */
+    padding-inline-end: calc(1.2rem + env(safe-area-inset-inline-end, 0px)); /* leave room for the right fold toggle */
   }
 
   .cp__sidebar-left-layout {
@@ -128,7 +128,7 @@ main.ls-fold-button-on-right {
 
   .ls-block {
     .block-control {
-      @apply absolute top-0 -right-1 z-[1];
+      @apply absolute top-0 -end-1 z-[1];
       opacity: 0.6;
       margin-top: 3px;
 
@@ -170,7 +170,7 @@ main.ls-fold-button-on-right {
   }
 
   .block-children-container {
-    margin-left: 7px;
+    margin-inline-start: 7px;
 
     .block-children {
       padding-left: 10px;
