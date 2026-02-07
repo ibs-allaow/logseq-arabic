@@ -61,12 +61,12 @@ body {
 
   ul {
     list-style: circle;
-    margin-left: 1.2em;
+    margin-inline-start: 1.2em;
   }
 
   ol {
     list-style: decimal;
-    margin-left: 1.2em;
+    margin-inline-start: 1.2em;
   }
 
   p {
