@@ -33,11 +33,12 @@
      {:ref   *el
       :class "top-1/2 -left-1/2 z-[-999]"}]))
 
-(rum/defc ^:large-vars/cleanup-todo container < rum/static
+(rum/defc ^:large-vars/cleanup-todo container < rum/reactive
   [{:keys [route theme accent-color editor-font on-click current-repo db-restoring?
            settings-open? sidebar-open? system-theme? sidebar-blocks-len preferred-language]} child]
   (let [mounted-fn (use-mounted)
-        [restored-sidebar? set-restored-sidebar?] (rum/use-state false)]
+        [restored-sidebar? set-restored-sidebar?] (rum/use-state false)
+        rtl? (state/sub-rtl?)]
 
     (hooks/use-effect!
      #(let [^js doc js/document.documentElement
@@ -68,12 +69,11 @@
      [editor-font])
 
     (hooks/use-effect!
-     #(let [doc js/document.documentElement
-            rtl? (#{"ar" "fa" "he" "ur"} (string/lower-case (name preferred-language)))]
+     #(let [doc js/document.documentElement]
         (.setAttribute doc "lang" preferred-language)
         (.setAttribute doc "dir" (if rtl? "rtl" "ltr"))
         (some-> preferred-language (string/lower-case) (js/LSI18N.setLocale)))
-     [preferred-language])
+     [preferred-language rtl?])
 
     (hooks/use-effect!
      #(ipc/ipc :theme-loaded)
