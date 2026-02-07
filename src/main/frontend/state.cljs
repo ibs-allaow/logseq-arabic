@@ -196,6 +196,7 @@
       :sidebar/blocks                        '()
 
       :preferred-language                    (storage/get :preferred-language)
+      :ui/rtl?                               (atom (util/rtl-lang? (storage/get :preferred-language)))
 
       ;; electron
       :electron/auto-updater-downloaded      false
@@ -805,7 +806,16 @@ Similar to re-frame subscriptions"
 (defn set-preferred-language!
   [language]
   (set-state! :preferred-language (name language))
-  (storage/set :preferred-language (name language)))
+  (storage/set :preferred-language (name language))
+  (set-state! :ui/rtl? (util/rtl-lang? language)))
+
+(defn rtl?
+  []
+  @(:ui/rtl? @state))
+
+(defn sub-rtl?
+  []
+  (sub :ui/rtl?))
 
 (defn delete-repo!
   [repo]
