@@ -1,0 +1,89 @@
+/* Global RTL Resets */
+html[dir="rtl"] {
+    text-align: right;
+}
+
+html[dir="rtl"] .flex {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .flex-row-reverse {
+    flex-direction: row;
+}
+
+/* Outliner Overrides */
+html[dir="rtl"] .block-children-container {
+    margin-left: 0;
+    margin-right: 29px;
+}
+
+html[dir="rtl"] .block-children {
+    border-left: 0 !important;
+    border-right: 1px solid;
+    border-right-color: var(--lx-gray-04-alpha, var(--ls-guideline-color, var(--rx-gray-04-alpha))) !important;
+}
+
+html[dir="rtl"] .block-children-left-border {
+    left: auto;
+    right: -1px;
+    border-left: 0;
+    border-right: 4px solid;
+    border-right-color: var(--lx-gray-09, var(--ls-border-color, var(--rx-gray-09)));
+}
+
+html[dir="rtl"] .block-control-wrap {
+    margin-right: 0;
+    margin-left: 2px;
+}
+
+html[dir="rtl"] .block-content-or-editor-inner {
+    padding-right: 0;
+    padding-left: 4px;
+}
+
+/* Sidebar Overrides */
+html[dir="rtl"] #main-container {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .cp__sidebar-left-layout {
+    left: auto;
+    right: 0;
+    border-right: 0;
+    border-left: 1px solid var(--ls-border-color);
+}
+
+/* Header/Breadcrumbs */
+html[dir="rtl"] .breadcrumb svg {
+    transform: rotate(180deg);
+}
+
+/* Icons and Bullets */
+html[dir="rtl"] .bullet-container {
+    margin-right: 0;
+    margin-left: 4px;
+}
+
+html[dir="rtl"] .ui__checkbox {
+    margin-right: 0;
+    margin-left: 6px;
+}
+
+/* Search and Inputs */
+html[dir="rtl"] .ls-search {
+    text-align: right;
+}
+
+html[dir="rtl"] input, html[dir="rtl"] textarea {
+    direction: rtl;
+}
+
+/* Specific component fixes */
+html[dir="rtl"] .ls-foldable-title-control {
+    margin-left: 0;
+    margin-right: -27px;
+}
