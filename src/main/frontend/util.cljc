@@ -38,7 +38,22 @@
      (defn safe-keyword
        [s]
        (when (string? s)
-         (keyword (string/replace s " " "_"))))))
+         (keyword (string/replace s " " "_"))))
+
+     (def rtl-languages #{:ar :fa :he :ur})
+
+     (defn rtl-lang?
+       "Check if a language code (string or keyword) is RTL."
+       [lang]
+       (let [lang (cond (keyword? lang) lang
+                        (string? lang) (keyword (string/lower-case lang))
+                        :else nil)]
+         (contains? rtl-languages lang)))
+
+     (defn get-dir
+       "Return 'rtl' or 'ltr' based on the language."
+       [lang]
+       (if (rtl-lang? lang) "rtl" "ltr"))))
 
 #?(:cljs (goog-define NODETEST false)
    :clj (def NODETEST false))
