@@ -28,14 +28,15 @@
             [promesa.core :as p]
             [rum.core :as rum]))
 
-(rum/defc toggle
+(rum/defc toggle < rum/reactive
   []
-  (when-not (util/sm-breakpoint?)
-    (ui/with-shortcut :ui/toggle-right-sidebar "left"
-      (shui/button-ghost-icon :layout-sidebar-right
-                              {:title (t :right-side-bar/toggle-right-sidebar)
-                               :class "toggle-right-sidebar"
-                               :on-click ui-handler/toggle-right-sidebar!}))))
+  (let [rtl? (state/sub-rtl?)]
+    (when-not (util/sm-breakpoint?)
+      (ui/with-shortcut :ui/toggle-right-sidebar (if rtl? "right" "left")
+        (shui/button-ghost-icon :layout-sidebar-right
+                                {:title (t :right-side-bar/toggle-right-sidebar)
+                                 :class "toggle-right-sidebar"
+                                 :on-click ui-handler/toggle-right-sidebar!})))))
 
 (rum/defc block-cp < rum/reactive
   [repo idx block]
@@ -354,7 +355,9 @@
                          sidebar-el (js/document.getElementById sidebar-id)
                          offset (.-pageX e)
                          ratio (.toFixed (/ offset width) 6)
-                         ratio (if (= handler-position :west) (- 1 ratio) ratio)
+                         rtl? (state/rtl?)
+                         handler-position' (if rtl? (if (= handler-position :west) :east :west) handler-position)
+                         ratio (if (= handler-position' :west) (- 1 ratio) ratio)
                          cursor-class (str "cursor-" (first (name handler-position)) "-resize")]
                      (if (= (.getAttribute el "data-expanded") "true")
                        (cond
