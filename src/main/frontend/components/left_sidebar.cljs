@@ -161,7 +161,8 @@
 
 (rum/defc sidebar-content-group < rum/reactive
   [name {:keys [class count more header-props enter-show-more? collapsable?]} child]
-  (let [collapsed? (state/sub [:ui/navigation-item-collapsed? class])]
+  (let [collapsed? (state/sub [:ui/navigation-item-collapsed? class])
+        rtl? (state/sub-rtl?)]
     [:div.sidebar-content-group
      {:class (util/classnames [class {:is-expand (not collapsed?)
                                       :has-children (and (number? count) (> count 0))}])}
@@ -176,7 +177,7 @@
          (assoc :on-click (fn [^js/MouseEvent _e]
                             (state/toggle-navigation-item-collapsed! class))))
        [:span.a name]
-       [:span.b (or more (ui/icon "chevron-right" {:class "more" :size 15}))]]
+       [:span.b (or more (ui/icon (if rtl? "chevron-left" "chevron-right") {:class "more" :size 15}))]]
       (when child [:div.bd child])]]))
 
 (rum/defc ^:large-vars/cleanup-todo sidebar-navigations
@@ -328,6 +329,7 @@
         ref-open? (rum/use-ref left-sidebar-open?)
         default-home (get-default-home-if-valid)
         route-name (get-in route-match [:data :name])
+        rtl? (state/sub-rtl?)
         on-contents-scroll #(when-let [^js el (.-target %)]
                               (let [top (.-scrollTop el)
                                     cls (.-classList el)
@@ -338,10 +340,16 @@
         close-fn #(set-local-closing? true)
         touching-x-offset (when (number? touching-x-offset)
                             (if-not left-sidebar-open?
-                              (when (> touching-x-offset 0)
-                                (min touching-x-offset (:width el-rect)))
-                              (when (< touching-x-offset 0)
-                                (max touching-x-offset (- 0 (:width el-rect))))))
+                              (let [limit (if rtl? (neg? touching-x-offset) (> touching-x-offset 0))]
+                                (when limit
+                                  (if rtl?
+                                    (max touching-x-offset (- (:width el-rect)))
+                                    (min touching-x-offset (:width el-rect)))))
+                              (let [limit (if rtl? (> touching-x-offset 0) (< touching-x-offset 0))]
+                                (when limit
+                                  (if rtl?
+                                    (min touching-x-offset (:width el-rect))
+                                    (max touching-x-offset (- (:width el-rect))))))))
         offset-ratio (and (number? touching-x-offset)
                           (some->> (:width el-rect)
                                    (/ touching-x-offset)))]
@@ -376,11 +384,11 @@
        :ref ref-el
        :style (cond-> {}
                 (and (number? offset-ratio)
-                     (> touching-x-offset 0))
-                (assoc :transform (str "translate3d(calc(" touching-x-offset "px - 100%), 0, 0)"))
+                     (if rtl? (< touching-x-offset 0) (> touching-x-offset 0)))
+                (assoc :transform (str "translate3d(calc(" touching-x-offset "px " (if rtl? "+ " "- ") " 100%), 0, 0)"))
 
                 (and (number? offset-ratio)
-                     (< touching-x-offset 0))
+                     (if rtl? (> touching-x-offset 0) (< touching-x-offset 0)))
                 (assoc :transform (str "translate3d(" (* offset-ratio 100) "%, 0, 0)")))
        :on-transition-end (fn []
                             (when local-closing?
@@ -465,7 +473,8 @@
   (let [close-fn #(state/set-left-sidebar-open! false)
         *closing? (::closing? s)
         *touch-state (::touch-state s)
-        *close-signal (::close-signal s)
+        [close-signal (::close-signal s)]
+        rtl? (state/sub-rtl?)
         touch-point-fn (fn [^js e] (some-> (gobj/get e "touches") (aget 0) (#(hash-map :x (.-clientX %) :y (.-clientY %)))))
         srs-open? (= :srs (state/sub :modal/id))
         touching-x-offset (and (some-> @*touch-state :after)
@@ -489,10 +498,14 @@
       (fn []
         (when touch-pending?
           (cond
-            (and (not left-sidebar-open?) (> touching-x-offset 40))
+            (if rtl?
+              (and (not left-sidebar-open?) (< touching-x-offset -40))
+              (and (not left-sidebar-open?) (> touching-x-offset 40)))
             (state/set-left-sidebar-open! true)
 
-            (and left-sidebar-open? (< touching-x-offset -30))
+            (if rtl?
+              (and left-sidebar-open? (> touching-x-offset 30))
+              (and left-sidebar-open? (< touching-x-offset -30)))
             (reset! *close-signal (inc @*close-signal))))
         (reset! *touch-state nil))}
 
