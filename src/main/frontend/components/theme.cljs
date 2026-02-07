@@ -68,8 +68,15 @@
      [editor-font])
 
     (hooks/use-effect!
-     #(let [doc js/document.documentElement]
+     #(let [doc js/document.documentElement
+            rtl? (util/rtl-language? preferred-language)
+            dir (if rtl? "rtl" "ltr")
+            cls (.-classList doc)]
         (.setAttribute doc "lang" preferred-language)
+        (.setAttribute doc "dir" dir)
+        (if rtl?
+          (.add cls "is-rtl")
+          (.remove cls "is-rtl"))
         (some-> preferred-language (string/lower-case) (js/LSI18N.setLocale)))
      [preferred-language])
 
