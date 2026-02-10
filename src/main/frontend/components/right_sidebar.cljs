@@ -378,10 +378,11 @@
                               (when-let [sidebar-el (js/document.getElementById sidebar-id)]
                                 (let [width js/document.documentElement.clientWidth
                                       min-ratio (max min-ratio (/ min-px-width width))
-                                      keyboard-step (case (.-code e)
-                                                      "ArrowLeft" (- keyboard-step)
-                                                      "ArrowRight" keyboard-step
-                                                      0)
+                                      keyboard-step (let [rtl? (util/rtl?)]
+                                                      (case (.-code e)
+                                                        "ArrowLeft" (if rtl? keyboard-step (- keyboard-step))
+                                                        "ArrowRight" (if rtl? (- keyboard-step) keyboard-step)
+                                                        0))
                                       offset (+ (.-x (.getBoundingClientRect sidebar-el)) keyboard-step)
                                       ratio (.toFixed (/ offset width) 6)
                                       ratio (if (= handler-position :west) (- 1 ratio) ratio)]

@@ -390,7 +390,8 @@
         logged? (user-handler/logged-in?)
         fold-button-on-right? (state/enable-fold-button-right?)
         show-action-bar? (state/sub :mobile/show-action-bar?)
-        preferred-language (state/sub [:preferred-language])]
+        preferred-language (state/sub [:preferred-language])
+        rtl? (util/rtl-language? preferred-language)]
     (theme/container
      {:t t
       :theme theme
@@ -417,7 +418,8 @@
                  :ls-wide-mode wide-mode?
                  :ls-window-controls window-controls?
                  :ls-fold-button-on-right fold-button-on-right?
-                 :ls-hl-colored ls-block-hl-colored?}])
+                 :ls-hl-colored ls-block-hl-colored?
+                 :ls-rtl rtl?}])
        :on-pointer-up (fn []
                         (when-let [container (gdom/getElement "app-container-wrapper")]
                           (d/remove-class! container "blocks-selection-mode")

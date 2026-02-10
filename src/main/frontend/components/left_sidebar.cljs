@@ -443,9 +443,15 @@
                (.draggable
                 #js {:listeners
                      #js {:move (fn [^js/MouseEvent e]
-                                  (when-let [offset (.-left (.-rect e))]
-                                    (let [width (.toFixed (max (min offset 460) 240) 2)]
-                                      (adjust-size! (str width "px")))))}})
+                                  (let [rect (.-rect e)
+                                        viewport-width (.-clientWidth el-doc)
+                                        rtl? (util/rtl?)
+                                        offset (if rtl?
+                                                 (- viewport-width (.-right rect))
+                                                 (.-left rect))]
+                                    (when offset
+                                      (let [width (.toFixed (max (min offset 460) 240) 2)]
+                                        (adjust-size! (str width "px"))))))}})
                (.styleCursor false)
                (.on "dragstart" (fn []
                                   (.. sidebar-el -classList (add "is-resizing"))

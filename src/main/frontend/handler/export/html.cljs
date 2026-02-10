@@ -413,7 +413,12 @@
                      ast**)
             hiccup (util/profile :block-ast->hiccup  (z/root (reduce block-ast->hiccup empty-ul-hiccup ast***)))
             ;; remove placeholder tag
-            hiccup* (vec (cons :ul (drop 2 hiccup)))]
+            preferred-language (or (when (exists? js/document)
+                                    (some-> js/document .-documentElement (.getAttribute "lang")))
+                                  "en")
+            root-attrs (cond-> {:lang preferred-language}
+                         (util/rtl-language? preferred-language) (assoc :dir "rtl"))
+            hiccup* (vec (cons :ul (cons root-attrs (drop 2 hiccup))))]
         (-> hiccup* h/render-html utils/prettifyXml)))))
 
 (defn export-blocks-as-html
