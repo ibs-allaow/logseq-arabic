@@ -118,19 +118,19 @@ body {
   blockquote, .block-content-or-editor-wrap[data-node-type='quote'] {
     text-indent: 0;
     padding: 8px 16px;
-    border-left: 4px solid;
+    border-inline-start: 4px solid;
     background-color: var(--ls-page-blockquote-bg-color, var(--lx-gray-04, hsl(var(--secondary))));
     color: var(--ls-page-blockquote-color, hsl(var(--secondary-foreground)));
     margin: 1rem 0;
     font-size: 1rem;
 
     &:has(.positioned-properties) {
-      padding-left: 10px;
+      padding-inline-start: 10px;
     }
   }
 
   html blockquote, .block-content-or-editor-wrap[data-node-type='quote']  {
-    border-left-color: var(--ls-page-blockquote-border-color, var(--lx-gray-05-alpha, hsl(var(--primary)/.4)));
+    border-inline-start-color: var(--ls-page-blockquote-border-color, var(--lx-gray-05-alpha, hsl(var(--primary)/.4)));
   }
 
   .block-content-or-editor-wrap[data-node-type='quote'] {
@@ -147,8 +147,7 @@ body {
   }
 
   img {
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline: auto;
   }
 
   video {
@@ -364,8 +363,8 @@ a.star-page:hover {
 }
 
 button.menu {
-  border-right: 1px solid;
-  border-right-color: var(--ls-secondary-background-color, #f0f8ff);
+  border-inline-end: 1px solid;
+  border-inline-end-color: var(--ls-secondary-background-color, #f0f8ff);
   color: var(--ls-link-text-color, #24292e);
 }
 
@@ -383,7 +382,7 @@ button.menu:focus {
 }
 
 .menu-backdrop {
-  @apply w-full h-full fixed top-0 left-0;
+  @apply w-full h-full fixed inset-0;
 
   z-index: var(--ls-z-index-level-1);
 }
@@ -408,12 +407,12 @@ a.login:hover {
 a.tooltip-priority {
   display: contents;
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
 }
 
 a.tooltip-priority::after {
   content: attr(priority);
-  margin-right: 10px;
+  margin-inline-end: 10px;
 }
 
 a.chosen {
@@ -619,7 +618,7 @@ mark > code {
 }
 
 #help-latex .katex-html {
-  text-align: right;
+  text-align: end;
 }
 
 a.page-op svg {

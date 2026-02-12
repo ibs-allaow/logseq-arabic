@@ -211,6 +211,7 @@
              (or (contains? rtl-languages lang)
                  (some #(string/starts-with? lang (str % "-")) rtl-languages)))))))
 
+
 (defn find-index
   "Find first index of an element in list"
   [pred-or-val coll]
