@@ -326,6 +326,7 @@
 (rum/defc sidebar-resizer
   [sidebar-open? sidebar-id handler-position]
   (let [el-ref (rum/use-ref nil)
+        rtl? (util/rtl-language? (state/sub :preferred-language))
         min-px-width 320 ; Custom window controls width
         min-ratio 0.1
         max-ratio 0.7
@@ -379,8 +380,8 @@
                                 (let [width js/document.documentElement.clientWidth
                                       min-ratio (max min-ratio (/ min-px-width width))
                                       keyboard-step (case (.-code e)
-                                                      "ArrowLeft" (- keyboard-step)
-                                                      "ArrowRight" keyboard-step
+                                                      "ArrowLeft" (if rtl? keyboard-step (- keyboard-step))
+                                                      "ArrowRight" (if rtl? (- keyboard-step) keyboard-step)
                                                       0)
                                       offset (+ (.-x (.getBoundingClientRect sidebar-el)) keyboard-step)
                                       ratio (.toFixed (/ offset width) 6)

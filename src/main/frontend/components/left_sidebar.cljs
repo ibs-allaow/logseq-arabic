@@ -424,6 +424,7 @@
   []
   (let [*el-ref (rum/use-ref nil)
         ^js el-doc js/document.documentElement
+        rtl? (util/rtl-language? (state/sub :preferred-language))
         adjust-size! (fn [width]
                        (.setProperty (.-style el-doc) "--ls-left-sidebar-width" width)
                        (storage/set :ls-left-sidebar-width width))]
@@ -443,9 +444,14 @@
                (.draggable
                 #js {:listeners
                      #js {:move (fn [^js/MouseEvent e]
-                                  (when-let [offset (.-left (.-rect e))]
-                                    (let [width (.toFixed (max (min offset 460) 240) 2)]
-                                      (adjust-size! (str width "px")))))}})
+                                  (let [rect (.-rect e)
+                                        viewport-width (.-clientWidth el-doc)
+                                        offset (if rtl?
+                                                 (- viewport-width (.-right rect))
+                                                 (.-left rect))]
+                                    (when offset
+                                      (let [width (.toFixed (max (min offset 460) 240) 2)]
+                                        (adjust-size! (str width "px"))))))}})
                (.styleCursor false)
                (.on "dragstart" (fn []
                                   (.. sidebar-el -classList (add "is-resizing"))

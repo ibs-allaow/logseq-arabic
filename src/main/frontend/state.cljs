@@ -804,8 +804,9 @@ Similar to re-frame subscriptions"
 
 (defn set-preferred-language!
   [language]
-  (set-state! :preferred-language (name language))
-  (storage/set :preferred-language (name language)))
+  (let [language (or (util/normalize-language-code language) "en")]
+    (set-state! :preferred-language language)
+    (storage/set :preferred-language language)))
 
 (defn delete-repo!
   [repo]
