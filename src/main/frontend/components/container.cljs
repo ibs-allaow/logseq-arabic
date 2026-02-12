@@ -390,7 +390,8 @@
         logged? (user-handler/logged-in?)
         fold-button-on-right? (state/enable-fold-button-right?)
         show-action-bar? (state/sub :mobile/show-action-bar?)
-        preferred-language (state/sub [:preferred-language])]
+        preferred-language (state/sub [:preferred-language])
+        rtl? (util/rtl-language? preferred-language)]
     (theme/container
      {:t t
       :theme theme
@@ -411,13 +412,17 @@
                   (util/fix-open-external-with-shift! e))}
 
      [:main.theme-container-inner#app-container-wrapper
-      {:class (util/classnames
+      {:data-dir (if rtl? "rtl" "ltr")
+       :class (util/classnames
                [{:ls-left-sidebar-open left-sidebar-open?
                  :ls-right-sidebar-open sidebar-open?
                  :ls-wide-mode wide-mode?
                  :ls-window-controls window-controls?
                  :ls-fold-button-on-right fold-button-on-right?
-                 :ls-hl-colored ls-block-hl-colored?}])
+                 :ls-hl-colored ls-block-hl-colored?
+                 :ls-rtl rtl?
+                 :ls-right-sidebar-rtl (and rtl? sidebar-open?)
+                 :ls-right-sidebar-ltr (and (not rtl?) sidebar-open?)}])
        :on-pointer-up (fn []
                         (when-let [container (gdom/getElement "app-container-wrapper")]
                           (d/remove-class! container "blocks-selection-mode")

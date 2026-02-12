@@ -194,6 +194,53 @@
      (p/do!
       (.setStyle StatusBar (clj->js {:style (.-Dark Style)})))))
 
+#?(:cljs
+   (def rtl-languages
+     #{"ar" "fa" "he" "ur"}))
+
+#?(:cljs
+   (defn normalize-language-code
+     [language]
+     (some-> (cond
+               (keyword? language) (name language)
+               (string? language) language
+               :else nil)
+             string/trim
+             (not-empty))))
+
+#?(:cljs
+   (defn rtl-language?
+     [language]
+     (let [lang (normalize-language-code language)
+           lang (some-> lang string/lower-case)]
+       (boolean
+        (and lang
+             (or (contains? rtl-languages lang)
+                 (some #(string/starts-with? lang (str % "-")) rtl-languages)))))))
+
+#?(:cljs
+   (defn language-direction
+     [language]
+     (if (rtl-language? language)
+       "rtl"
+       "ltr")))
+
+
+(defn flip-horizontal-direction
+  [direction]
+  (case direction
+    :left :right
+    :right :left
+    direction))
+
+#?(:cljs
+   (defn logical-horizontal-direction
+     [direction language]
+     (if (rtl-language? language)
+       (flip-horizontal-direction direction)
+       direction)))
+
+
 (defn find-index
   "Find first index of an element in list"
   [pred-or-val coll]
