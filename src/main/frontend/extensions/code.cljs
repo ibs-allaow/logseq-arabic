@@ -496,6 +496,10 @@
                                                    (contains? #{"ArrowLeft" "ArrowRight"} key-code)
                                                    (let [direction (-> (if (= "ArrowLeft" key-code) :left :right)
                                                                        (util/logical-horizontal-direction (state/sub :preferred-language)))]
+                                                   (let [rtl? (util/rtl-language? (state/sub :preferred-language))
+                                                         direction (if (= "ArrowLeft" key-code)
+                                                                     (if rtl? :right :left)
+                                                                     (if rtl? :left :right))]
                                                      (when (and (= @*cursor-prev @*cursor-curr)
                                                                 (or (and direction (nil? @*cursor-curr))
                                                                     (case direction
