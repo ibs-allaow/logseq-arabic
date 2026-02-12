@@ -69,7 +69,6 @@
 
     (hooks/use-effect!
      #(let [doc js/document.documentElement
-            preferred-language (or preferred-language "en")
             rtl? (util/rtl-language? preferred-language)
             dir (if rtl? "rtl" "ltr")
             cls (.-classList doc)]

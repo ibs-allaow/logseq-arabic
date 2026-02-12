@@ -211,21 +211,6 @@
              (or (contains? rtl-languages lang)
                  (some #(string/starts-with? lang (str % "-")) rtl-languages)))))))
 
-#?(:cljs
-   (defn language-direction
-     [language]
-     (if (rtl-language? language)
-       "rtl"
-       "ltr")))
-
-#?(:cljs
-   (defn rtl?
-     []
-     (when (exists? js/document)
-       (= "rtl" (or (some-> js/document
-                             .-documentElement
-                             (.getAttribute "dir"))
-                     "ltr")))))
 
 (defn find-index
   "Find first index of an element in list"
