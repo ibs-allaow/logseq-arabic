@@ -212,6 +212,12 @@
    (defn rtl-language?
      [language]
      (let [lang (normalize-language-code language)
+   (defn rtl-language?
+     [language]
+     (let [lang (cond
+                  (keyword? language) (name language)
+                  (string? language) language
+                  :else nil)
            lang (some-> lang string/lower-case)]
        (boolean
         (and lang
