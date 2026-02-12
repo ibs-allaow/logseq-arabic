@@ -232,6 +232,21 @@
        "ltr")))
 
 
+(defn flip-horizontal-direction
+  [direction]
+  (case direction
+    :left :right
+    :right :left
+    direction))
+
+#?(:cljs
+   (defn logical-horizontal-direction
+     [direction language]
+     (if (rtl-language? language)
+       (flip-horizontal-direction direction)
+       direction)))
+
+
 (defn find-index
   "Find first index of an element in list"
   [pred-or-val coll]
