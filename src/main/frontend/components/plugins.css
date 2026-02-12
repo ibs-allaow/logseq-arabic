@@ -191,7 +191,7 @@
       max-height: 50px;
       overflow: hidden;
       line-height: 24px;
-      padding-right: 24px;
+      padding-inline-end: 24px;
 
       > .l {
         display: inline-block;
@@ -279,9 +279,9 @@
         .de {
           font-size: 10px;
           padding: 5px 2px;
-          padding-right: 3px;
+          padding-inline-end: 3px;
           border-radius: 2px;
-          margin-right: 5px;
+          margin-inline-end: 5px;
           user-select: none;
           transition: none;
           opacity: .2;
@@ -371,7 +371,7 @@
           border-radius: 2px;
           user-select: none;
           position: relative;
-          margin-left: 4px;
+          margin-inline-start: 4px;
 
           svg {
             opacity: .3;
@@ -398,13 +398,13 @@
             small {
               position: absolute;
               transform: scale(.5) translateX(-180%);
-              margin-right: 2px;
+              margin-inline-end: 2px;
             }
           }
         }
 
         .ui__toggle {
-          margin-left: 5px;
+          margin-inline-start: 5px;
         }
       }
     }
@@ -415,7 +415,7 @@
       }
 
       .ctl {
-        padding-left: 12px;
+        padding-inline-start: 12px;
         bottom: -5px;
       }
     }
@@ -504,7 +504,7 @@
           align-items: center;
 
           code {
-            margin-right: 4px;
+            margin-inline-end: 4px;
             line-height: 1.2;
           }
         }
@@ -556,14 +556,14 @@
           flex-wrap: wrap;
 
           label {
-            padding-right: 15px;
+            padding-inline-end: 15px;
             user-select: none;
             white-space: nowrap;
             margin-top: 2px;
           }
 
           input {
-            margin-right: 6px;
+            margin-inline-end: 6px;
           }
         }
 
@@ -900,7 +900,7 @@
       .ui__button {
         font-size: 13px;
         padding: 4px;
-        margin-left: 6px;
+        margin-inline-start: 6px;
       }
     }
 
@@ -971,7 +971,7 @@ body[data-page=plugins] {
   .cp__sidebar-main-content {
     max-width: 1280px !important;
     width: 80%;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-inline-start: 30px;
+    padding-inline-end: 30px;
   }
 }

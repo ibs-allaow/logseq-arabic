@@ -48,7 +48,10 @@
                        ;; Remove OverlayScrollbars and transition `.scrollbar-spacing`
                        ;; to use `scollbar-gutter` after the feature is implemented in browsers.
                       :enableBlinkFeatures     'OverlayScrollbars'
-                      :preload                 (node-path/join js/__dirname "js/preload.js")}}
+                      :preload                 (node-path/join js/__dirname "js/preload.js")
+                      ;; NOTE(RTL phase 7): direction (`lang`/`dir`) is managed by frontend runtime
+                      ;; (theme.cljs). Keep electron window bootstrap neutral and do not override it here.
+                      }}}
 
                      (seq opts)
                      (merge opts)
@@ -181,7 +184,9 @@
                               :nodeIntegration false
                               :webSecurity (not dev?)
                               :preload (node-path/join js/__dirname "js/preload.js")
-                              :nativeWindowOpen true}}}
+                              :nativeWindowOpen true
+                              ;; NOTE(RTL phase 7): no direction override in popup windows either.
+                              }}}
                            features)
                     (do (open-external! url) {:action "deny"}))
                   (bean/->js))))]

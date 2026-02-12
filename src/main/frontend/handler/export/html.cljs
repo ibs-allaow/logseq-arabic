@@ -375,6 +375,22 @@
 ;;; block/inline-ast -> hiccup (ends)
 
 ;;; export fns
+
+(defn- resolve-export-language
+  [options]
+  (let [options-language (some-> (get-in options [:other-options :preferred-language])
+                                 util/normalize-language-code)
+        document-language (some-> (when (exists? js/document)
+                                    (some-> js/document .-documentElement (.getAttribute "lang")))
+                                  util/normalize-language-code)]
+    (or options-language document-language "en")))
+
+(defn- export-root-attrs
+  [options]
+  (let [language (resolve-export-language options)]
+    {:lang language
+     :dir (util/language-direction language)}))
+
 (defn- export-helper
   [content format options]
   (let [remove-options (set (:remove-options options))
@@ -413,7 +429,8 @@
                      ast**)
             hiccup (util/profile :block-ast->hiccup  (z/root (reduce block-ast->hiccup empty-ul-hiccup ast***)))
             ;; remove placeholder tag
-            hiccup* (vec (cons :ul (drop 2 hiccup)))]
+            root-attrs (export-root-attrs options)
+            hiccup* (vec (cons :ul (cons root-attrs (drop 2 hiccup))))]
         (-> hiccup* h/render-html utils/prettifyXml)))))
 
 (defn export-blocks-as-html

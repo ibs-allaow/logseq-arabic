@@ -290,7 +290,8 @@
               (ipc/ipc :userAppCfgs :auto-update (not enabled?))))))
 
 (defn language-row [t preferred-language]
-  (let [on-change (fn [e]
+  (let [preferred-language (or (util/normalize-language-code preferred-language) "en")
+        on-change (fn [e]
                     (let [lang-code (util/evalue e)]
                       (state/set-preferred-language! lang-code)
                       (ui-handler/re-render-root!)))

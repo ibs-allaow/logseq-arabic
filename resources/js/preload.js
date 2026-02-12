@@ -8,6 +8,9 @@ const IS_WIN32 = process.platform === 'win32'
 
 const ALLOWED_EXTERNAL_PROTOCOLS = ['https:', 'http:', 'mailto:', 'zotero:', 'file:']
 
+// NOTE(RTL phase 7): preload bridge is direction-agnostic on purpose.
+// Do not set or mutate document lang/dir from here; renderer/theme owns it.
+
 function getFilePathFromClipboard () {
   if (IS_WIN32) {
     const rawFilePath = clipboard.read('FileNameW')

@@ -494,7 +494,8 @@
                                                      shifted? (.-shiftKey e)]
                                                  (cond
                                                    (contains? #{"ArrowLeft" "ArrowRight"} key-code)
-                                                   (let [direction (if (= "ArrowLeft" key-code) :left :right)]
+                                                   (let [direction (-> (if (= "ArrowLeft" key-code) :left :right)
+                                                                       (util/logical-horizontal-direction (state/sub :preferred-language)))]
                                                      (when (and (= @*cursor-prev @*cursor-curr)
                                                                 (or (and direction (nil? @*cursor-curr))
                                                                     (case direction

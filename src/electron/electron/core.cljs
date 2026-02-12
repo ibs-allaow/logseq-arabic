@@ -113,6 +113,8 @@
         :log-error-fn logger/error
         :notification-fn #(send-to-renderer :notification %)}))))
 
+;; NOTE(RTL phase 7): Main process must not override renderer direction.
+;; `lang`/`dir` are applied in frontend theme runtime and should stay single-source-of-truth.
 (defn setup-app-manager!
   [^js win]
   (let [toggle-win-channel "toggle-max-or-min-active-win"
