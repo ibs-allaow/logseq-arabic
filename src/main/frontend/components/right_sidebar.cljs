@@ -478,10 +478,11 @@
                  blocks)
         sidebar-open? (state/sub :ui/sidebar-open?)
         width (state/sub :ui/sidebar-width)
-        repo (state/sub :git/current-repo)]
+        repo (state/sub :git/current-repo)
+        rtl? (util/rtl-language? (state/sub :preferred-language))]
     [:div#right-sidebar.cp__right-sidebar.h-screen
      {:class (if sidebar-open? "open" "closed")
       :style {:width width}}
-     (sidebar-resizer sidebar-open? "right-sidebar" :west)
+     (sidebar-resizer sidebar-open? "right-sidebar" (if rtl? :east :west))
      (when sidebar-open?
        (sidebar-inner repo t blocks))]))

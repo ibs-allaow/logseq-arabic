@@ -483,7 +483,8 @@
     [:div#left-sidebar.cp__sidebar-left-layout
      {:class (util/classnames [{:is-open left-sidebar-open?
                                 :is-closing @*closing?
-                                :is-touching touch-pending?}])
+                                :is-touching touch-pending?
+                                :is-rtl (util/rtl-language? (state/sub :preferred-language))}])
       :on-touch-start
       (fn [^js e]
         (reset! *touch-state {:before (touch-point-fn e)}))
