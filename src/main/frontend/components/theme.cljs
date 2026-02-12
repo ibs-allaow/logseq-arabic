@@ -71,7 +71,7 @@
      #(let [doc js/document.documentElement
             preferred-language (or preferred-language "en")
             rtl? (util/rtl-language? preferred-language)
-            dir (util/language-direction preferred-language)
+            dir (if rtl? "rtl" "ltr")
             cls (.-classList doc)]
         (.setAttribute doc "lang" preferred-language)
         (.setAttribute doc "dir" dir)
