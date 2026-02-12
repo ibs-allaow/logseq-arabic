@@ -1,7 +1,7 @@
 @supports (padding: max(0px)) {
   .post {
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    padding-inline-start: max(12px, env(safe-area-inset-left));
+    padding-inline-end: max(12px, env(safe-area-inset-right));
   }
 }
 
@@ -38,13 +38,13 @@
   overflow-y: hidden;
   position: relative;
   height: 100%;
-  transition: padding-left .3s;
+  transition: padding-inline-start .3s;
 
   &.is-left-sidebar-open {
-    padding-left: 0;
+    padding-inline-start: 0;
 
     @screen sm {
-      padding-left: var(--ls-left-sidebar-width);
+      padding-inline-start: var(--ls-left-sidebar-width);
     }
   }
 }
@@ -65,7 +65,7 @@
 
     width: var(--ls-left-sidebar-sm-width);
     background-color: var(--left-sidebar-bg-color);
-    border-right: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
+    border-inline-end: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
   }
 
   > .wrap {
@@ -311,7 +311,6 @@
   }
 }
 
-
 .cp__sidebar-left-layout {
   @apply fixed top-0 left-0 w-[10px] z-[var(--ls-z-index-level-4)];
 
@@ -396,12 +395,20 @@
   }
 
   .left-sidebar-resizer {
-    @apply absolute w-[3px] top-0 right-[-2px] bottom-0 overflow-hidden cursor-col-resize;
+    @apply absolute w-[3px] top-0 bottom-0 overflow-hidden cursor-col-resize;
+    inset-inline-end: -2px;
     @apply z-10 transition-[background-color] duration-200 delay-300;
 
     &.is-active, &:hover,
     &:focus, &:active {
       @apply bg-primary/90;
+    }
+  }
+
+  &.is-rtl {
+    .left-sidebar-resizer {
+      inset-inline-end: auto;
+      inset-inline-start: -2px;
     }
   }
 
@@ -427,7 +434,6 @@
 }
 
 .ls-left-sidebar-open {
-
   @screen sm {
     .cp__header > .r {
       display: flex;
@@ -438,20 +444,20 @@
 .ls-window-controls {
   &.ls-right-sidebar-open {
     .cp__right-sidebar-topbar {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
 
   &:not(.ls-right-sidebar-open) {
     .cp__header > .r {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
@@ -539,9 +545,15 @@
   user-select: none;
 
   .resizer {
-    @apply absolute top-0 bottom-0 touch-none left-[1px] w-[3px] select-none;
+    @apply absolute top-0 bottom-0 touch-none w-[3px] select-none;
+    inset-inline-start: 1px;
     @apply cursor-col-resize hover:bg-primary/90 focus:bg-primary/90 active:bg-primary/90;
     @apply z-[1000] delay-300 transition-[background-color] duration-200;
+
+    &[data-side="east"] {
+      inset-inline-start: auto;
+      inset-inline-end: 1px;
+    }
   }
 
   &.closed {
@@ -725,7 +737,7 @@
 }
 
 li.dragging-target {
-  border-left: 5px solid green;
+  border-inline-start: 5px solid green;
 }
 
 .full-height-without-header {
