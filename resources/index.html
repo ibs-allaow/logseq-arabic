@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta content="minimum-scale=1, initial-scale=1, maximum-scale=1, width=device-width, shrink-to-fit=no" name="viewport">
@@ -29,6 +29,13 @@
 </head>
 <body>
 <div id="root"></div>
+<script data-direction-bootstrap>
+  ;(() => {
+    const root = document.documentElement
+    if (!root.getAttribute("lang")) root.setAttribute("lang", "en")
+    if (!root.getAttribute("dir")) root.setAttribute("dir", "ltr")
+  })()
+</script>
 <script>window.__LSP__HOST__ = true</script>
 <script>window.user = null</script>
 <script src="./js/magic_portal.js"></script>
