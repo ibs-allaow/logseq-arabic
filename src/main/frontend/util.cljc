@@ -199,6 +199,19 @@
      #{"ar" "fa" "he" "ur"}))
 
 #?(:cljs
+   (defn normalize-language-code
+     [language]
+     (some-> (cond
+               (keyword? language) (name language)
+               (string? language) language
+               :else nil)
+             string/trim
+             (not-empty))))
+
+#?(:cljs
+   (defn rtl-language?
+     [language]
+     (let [lang (normalize-language-code language)
    (defn rtl-language?
      [language]
      (let [lang (cond
@@ -210,6 +223,13 @@
         (and lang
              (or (contains? rtl-languages lang)
                  (some #(string/starts-with? lang (str % "-")) rtl-languages)))))))
+
+#?(:cljs
+   (defn language-direction
+     [language]
+     (if (rtl-language? language)
+       "rtl"
+       "ltr")))
 
 
 (defn find-index
