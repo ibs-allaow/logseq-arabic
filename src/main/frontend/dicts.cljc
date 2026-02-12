@@ -92,5 +92,12 @@
    {:label "Čeština" :value :cs}
    {:label "العربية" :value :ar}])
 
+(def rtl-languages
+  "Languages that should render app-level UI in RTL direction"
+  #{:ar :fa})
+
 (assert (= (set (keys dicts)) (set (map :value languages)))
         "List of user-facing languages must match list of dictionaries")
+
+(assert (every? (set (map :value languages)) rtl-languages)
+        "RTL languages must be present in user-facing languages list")
