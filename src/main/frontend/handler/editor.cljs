@@ -2269,7 +2269,8 @@
 
 (defn keydown-arrow-handler
   [direction]
-  (let [input (state/get-input)
+  (let [direction (util/logical-horizontal-direction direction (state/sub :preferred-language))
+        input (state/get-input)
         element js/document.activeElement
         selected-start (util/get-selection-start input)
         selected-end (util/get-selection-end input)
@@ -2944,7 +2945,8 @@
 (defn open-selected-block!
   [direction e]
   (when-not (auto-complete?)
-    (let [selected-blocks (state/get-selection-blocks)
+    (let [direction (util/logical-horizontal-direction direction (state/sub :preferred-language))
+          selected-blocks (state/get-selection-blocks)
           f (case direction :left first :right last)
           node (some-> selected-blocks f)]
       (if (some-> node (dom/has-class? "block-add-button"))

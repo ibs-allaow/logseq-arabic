@@ -1,7 +1,7 @@
 @supports (padding: max(0px)) {
   .post {
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    padding-inline-start: max(12px, env(safe-area-inset-left));
+    padding-inline-end: max(12px, env(safe-area-inset-right));
   }
 }
 
@@ -38,13 +38,13 @@
   overflow-y: hidden;
   position: relative;
   height: 100%;
-  transition: padding-left .3s;
+  transition: padding-inline-start .3s;
 
   &.is-left-sidebar-open {
-    padding-left: 0;
+    padding-inline-start: 0;
 
     @screen sm {
-      padding-left: var(--ls-left-sidebar-width);
+      padding-inline-start: var(--ls-left-sidebar-width);
     }
   }
 }
@@ -65,7 +65,7 @@
 
     width: var(--ls-left-sidebar-sm-width);
     background-color: var(--left-sidebar-bg-color);
-    border-right: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
+    border-inline-end: 1px solid var(--lx-gray-03, var(--ls-tertiary-background-color));
   }
 
   > .wrap {
@@ -438,20 +438,20 @@
 .ls-window-controls {
   &.ls-right-sidebar-open {
     .cp__right-sidebar-topbar {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
 
   &:not(.ls-right-sidebar-open) {
     .cp__header > .r {
-      margin-right: 144px;
+      margin-inline-end: 144px;
 
       .is-fullscreen & {
-        margin-right: 48px;
+        margin-inline-end: 48px;
       }
     }
   }
@@ -725,7 +725,7 @@
 }
 
 li.dragging-target {
-  border-left: 5px solid green;
+  border-inline-start: 5px solid green;
 }
 
 .full-height-without-header {
