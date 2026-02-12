@@ -212,12 +212,20 @@
                  (some #(string/starts-with? lang (str % "-")) rtl-languages)))))))
 
 #?(:cljs
+   (defn language-direction
+     [language]
+     (if (rtl-language? language)
+       "rtl"
+       "ltr")))
+
+#?(:cljs
    (defn rtl?
      []
      (when (exists? js/document)
-       (= "rtl" (some-> js/document
-                         .-documentElement
-                         (.getAttribute "dir"))))))
+       (= "rtl" (or (some-> js/document
+                             .-documentElement
+                             (.getAttribute "dir"))
+                     "ltr")))))
 
 (defn find-index
   "Find first index of an element in list"

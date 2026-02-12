@@ -382,7 +382,7 @@ button.menu:focus {
 }
 
 .menu-backdrop {
-  @apply w-full h-full fixed top-0 left-0;
+  @apply w-full h-full fixed inset-0;
 
   z-index: var(--ls-z-index-level-1);
 }

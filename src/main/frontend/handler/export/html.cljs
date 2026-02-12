@@ -416,8 +416,8 @@
             preferred-language (or (when (exists? js/document)
                                     (some-> js/document .-documentElement (.getAttribute "lang")))
                                   "en")
-            root-attrs (cond-> {:lang preferred-language}
-                         (util/rtl-language? preferred-language) (assoc :dir "rtl"))
+            root-attrs {:lang preferred-language
+                        :dir (util/language-direction preferred-language)}
             hiccup* (vec (cons :ul (cons root-attrs (drop 2 hiccup))))]
         (-> hiccup* h/render-html utils/prettifyXml)))))
 

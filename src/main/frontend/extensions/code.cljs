@@ -494,7 +494,7 @@
                                                      shifted? (.-shiftKey e)]
                                                  (cond
                                                    (contains? #{"ArrowLeft" "ArrowRight"} key-code)
-                                                   (let [rtl? (util/rtl?)
+                                                   (let [rtl? (util/rtl-language? (state/sub :preferred-language))
                                                          direction (if (= "ArrowLeft" key-code)
                                                                      (if rtl? :right :left)
                                                                      (if rtl? :left :right))]

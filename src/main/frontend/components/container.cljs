@@ -412,7 +412,8 @@
                   (util/fix-open-external-with-shift! e))}
 
      [:main.theme-container-inner#app-container-wrapper
-      {:class (util/classnames
+      {:data-dir (if rtl? "rtl" "ltr")
+       :class (util/classnames
                [{:ls-left-sidebar-open left-sidebar-open?
                  :ls-right-sidebar-open sidebar-open?
                  :ls-wide-mode wide-mode?

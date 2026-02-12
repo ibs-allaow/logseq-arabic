@@ -424,6 +424,7 @@
   []
   (let [*el-ref (rum/use-ref nil)
         ^js el-doc js/document.documentElement
+        rtl? (util/rtl-language? (state/sub :preferred-language))
         adjust-size! (fn [width]
                        (.setProperty (.-style el-doc) "--ls-left-sidebar-width" width)
                        (storage/set :ls-left-sidebar-width width))]
@@ -445,7 +446,6 @@
                      #js {:move (fn [^js/MouseEvent e]
                                   (let [rect (.-rect e)
                                         viewport-width (.-clientWidth el-doc)
-                                        rtl? (util/rtl?)
                                         offset (if rtl?
                                                  (- viewport-width (.-right rect))
                                                  (.-left rect))]
