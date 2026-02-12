@@ -335,6 +335,9 @@
         remove-resizing-class (fn []
                                 (.. js/document.documentElement -classList (remove "is-resizing-buf"))
                                 (reset! ui-handler/*right-sidebar-resized-at (js/Date.now)))
+        offset->ratio (fn [offset width]
+                        (let [ratio (.toFixed (/ offset width) 6)]
+                          (if (= handler-position :west) (- 1 ratio) ratio)))
         set-width! (fn [ratio]
                      (when el-ref
                        (let [value (* ratio 100)
@@ -354,8 +357,7 @@
                          min-ratio (max min-ratio (/ min-px-width width))
                          sidebar-el (js/document.getElementById sidebar-id)
                          offset (.-pageX e)
-                         ratio (.toFixed (/ offset width) 6)
-                         ratio (if (= handler-position :west) (- 1 ratio) ratio)
+                         ratio (offset->ratio offset width)
                          cursor-class (str "cursor-" (first (name handler-position)) "-resize")]
                      (if (= (.getAttribute el "data-expanded") "true")
                        (cond
@@ -384,8 +386,7 @@
                                                       "ArrowRight" (if rtl? (- keyboard-step) keyboard-step)
                                                       0)
                                       offset (+ (.-x (.getBoundingClientRect sidebar-el)) keyboard-step)
-                                      ratio (.toFixed (/ offset width) 6)
-                                      ratio (if (= handler-position :west) (- 1 ratio) ratio)]
+                                      ratio (offset->ratio offset width)]
                                   (when (and (> ratio min-ratio) (< ratio max-ratio) (not (zero? keyboard-step)))
                                     (do (add-resizing-class)
                                         (set-width! ratio)))))))
@@ -404,12 +405,15 @@
      {:ref              el-ref
       :role             "separator"
       :aria-orientation "vertical"
-      :aria-label       (t :right-side-bar/separator)
+      :aria-label       (if (= handler-position :west)
+                          (str (t :right-side-bar/separator) " (left)")
+                          (str (t :right-side-bar/separator) " (right)"))
       :aria-valuemin    (* min-ratio 100)
       :aria-valuemax    (* max-ratio 100)
       :aria-valuenow    50
       :tabIndex         "0"
-      :data-expanded    sidebar-open?}]))
+      :data-expanded    sidebar-open?
+      :data-side        (name handler-position)}]))
 
 (rum/defcs sidebar-inner <
   (rum/local false ::anim-finished?)

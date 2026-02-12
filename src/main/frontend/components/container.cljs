@@ -420,6 +420,9 @@
                  :ls-window-controls window-controls?
                  :ls-fold-button-on-right fold-button-on-right?
                  :ls-hl-colored ls-block-hl-colored?
+                 :ls-rtl rtl?
+                 :ls-right-sidebar-rtl (and rtl? sidebar-open?)
+                 :ls-right-sidebar-ltr (and (not rtl?) sidebar-open?)}])
                  :ls-rtl rtl?}])
        :on-pointer-up (fn []
                         (when-let [container (gdom/getElement "app-container-wrapper")]

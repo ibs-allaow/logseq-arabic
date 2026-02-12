@@ -461,7 +461,13 @@
                                 (.. el-doc -classList (remove "is-resizing-buf"))))))
          #()))
      [])
-    [:span.left-sidebar-resizer {:ref *el-ref}]))
+    [:span.left-sidebar-resizer
+     {:ref *el-ref
+      :role "separator"
+      :aria-orientation "vertical"
+      :aria-label "Left sidebar separator"
+      :tabIndex "0"
+      :data-side (if rtl? "left" "right")}]))
 
 (rum/defcs left-sidebar < rum/reactive
   (rum/local false ::closing?)

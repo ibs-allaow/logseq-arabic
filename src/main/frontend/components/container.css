@@ -311,7 +311,6 @@
   }
 }
 
-
 .cp__sidebar-left-layout {
   @apply fixed top-0 left-0 w-[10px] z-[var(--ls-z-index-level-4)];
 
@@ -396,12 +395,20 @@
   }
 
   .left-sidebar-resizer {
-    @apply absolute w-[3px] top-0 right-[-2px] bottom-0 overflow-hidden cursor-col-resize;
+    @apply absolute w-[3px] top-0 bottom-0 overflow-hidden cursor-col-resize;
+    inset-inline-end: -2px;
     @apply z-10 transition-[background-color] duration-200 delay-300;
 
     &.is-active, &:hover,
     &:focus, &:active {
       @apply bg-primary/90;
+    }
+  }
+
+  &.is-rtl {
+    .left-sidebar-resizer {
+      inset-inline-end: auto;
+      inset-inline-start: -2px;
     }
   }
 
@@ -427,7 +434,6 @@
 }
 
 .ls-left-sidebar-open {
-
   @screen sm {
     .cp__header > .r {
       display: flex;
@@ -539,9 +545,15 @@
   user-select: none;
 
   .resizer {
-    @apply absolute top-0 bottom-0 touch-none left-[1px] w-[3px] select-none;
+    @apply absolute top-0 bottom-0 touch-none w-[3px] select-none;
+    inset-inline-start: 1px;
     @apply cursor-col-resize hover:bg-primary/90 focus:bg-primary/90 active:bg-primary/90;
     @apply z-[1000] delay-300 transition-[background-color] duration-200;
+
+    &[data-side="east"] {
+      inset-inline-start: auto;
+      inset-inline-end: 1px;
+    }
   }
 
   &.closed {
