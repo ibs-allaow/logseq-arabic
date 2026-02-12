@@ -53,3 +53,18 @@
       (is (= @actual-ops 4))
       (is (= (m+ 3 5) 8))
       (is (= @actual-ops 4)))))
+
+(deftest test-rtl-language-detection
+  (testing "rtl-language? supports exact language codes"
+    (is (true? (util/rtl-language? "ar")))
+    (is (true? (util/rtl-language? :fa)))
+    (is (true? (util/rtl-language? "he")))
+    (is (true? (util/rtl-language? "ur")))
+    (is (false? (util/rtl-language? "en"))))
+
+  (testing "rtl-language? supports regional tags"
+    (is (true? (util/rtl-language? "ar-SA")))
+    (is (true? (util/rtl-language? "fa-IR")))
+    (is (true? (util/rtl-language? "he-IL")))
+    (is (true? (util/rtl-language? "ur-PK")))
+    (is (false? (util/rtl-language? "en-US")))))
